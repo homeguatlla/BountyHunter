@@ -78,7 +78,9 @@ void ANPCAIController::CreateAgent()
 {
 	AgentBuilder builder;
 
-	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, 100.0f);
+	//const auto pathFollowingComponent = this->GetPathFollowingComponent();
+	auto acceptanceRadius = 100.0f; //pathFollowingComponent->GetAcceptanceRadius();
+	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
 	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
 	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
 	const auto world = GetWorld();
