@@ -32,6 +32,18 @@ void ANPCAIController::Tick(float DeltaTime)
 	}
 }
 
+void ANPCAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
+{
+	if(Result.IsSuccess())
+	{
+		//mNavigationPlanner->OnMoveCompleted();
+	}
+	else
+	{
+		//TODO movement interrupted or failed.
+	}
+}
+
 FVector ANPCAIController::GetPosition() const
 {
 	ACharacter* character = GetCharacter();
@@ -66,7 +78,7 @@ void ANPCAIController::CreateAgent()
 {
 	AgentBuilder builder;
 
-	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner);
+	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, 100.0f);
 	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
 	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
 	const auto world = GetWorld();

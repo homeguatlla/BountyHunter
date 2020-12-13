@@ -32,7 +32,7 @@ public:
 	void GetPathFromTo(const glm::vec3& origin, const glm::vec3& destination, PathFromToCallback callback) override;
 	glm::vec3 GetLocationGivenAName(const std::string& locationName) const override;
 	unsigned int GetAproxCost(const glm::vec3& origin, const glm::vec3& destination) const override;
-
+	
 private:
 	void FindLocations();
 	void CalculateCostMatrix();

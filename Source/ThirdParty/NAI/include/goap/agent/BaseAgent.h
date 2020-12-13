@@ -4,9 +4,6 @@
 #include "goap/GoapTypes.h"
 #include "utils/fsm/StatesMachine.h"
 #include "goap/agent/fsm/states/Planning.h"
-#include "goap/agent/fsm/states/Processing.h"
-#include "goap/agent/fsm/transitions/EnterPlanning.h"
-#include "goap/agent/fsm/transitions/EnterProcessing.h"
 #include "goap/PredicatesHandler.h"
 #include <vector>
 #include <memory>

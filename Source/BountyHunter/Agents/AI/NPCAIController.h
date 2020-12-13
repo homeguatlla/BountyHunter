@@ -19,6 +19,7 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 	public:
 		void BeginPlay() override;
 		void Tick(float DeltaTime) override;
+		void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
 
 		FVector GetPosition() const override;
 		void MoveTo(float elapsedTime, const FVector& point) override;
