@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <map>
 
 namespace NAI
 {
@@ -28,17 +29,24 @@ namespace NAI
 			void Reset() final override;
 			std::vector<std::shared_ptr<IPredicate>> GetPredicatesCanBeAccomplished(std::vector<std::shared_ptr<IPredicate>> desiredPredicates) override;
 			std::vector<std::shared_ptr<IPredicate>> GetPredicatesSatisfyPreconditions(std::vector<std::shared_ptr<IPredicate>> inputPredicates) override;
+
+			void AddStimulusAcceptance(const std::string& stimulusClassName, std::function<std::shared_ptr<IPredicate>(std::shared_ptr<IStimulus>)> creator) override;
+			bool IsStimulusAccepted(std::shared_ptr<IStimulus> stimulus) const override;
+			std::shared_ptr<IPredicate>	TransformStimulusIntoPredicates(std::shared_ptr<IStimulus> stimulus) const override;
+		
 		protected:
 			virtual void DoCreate(const std::shared_ptr<IAgent>& agent) {}
 			virtual void DoAccomplished(std::vector<std::shared_ptr<IPredicate>>& predicates) {}
 			virtual void DoCancel() {}
 			virtual void DoReset() {}
+			virtual std::shared_ptr<IPredicate> DoAccept(std::shared_ptr<IStimulus> stimulus) const { return {}; }
 
 		private:
 			void CalculateCost();
 
 		protected:
 			std::vector<std::shared_ptr<IAction>> mActions;
+			std::map<std::string, std::function<std::shared_ptr<IPredicate>(std::shared_ptr<IStimulus>)>> mStimulusAccepted;
 			unsigned int mCurrentActionIndex;
 			unsigned int mCost;
 		};

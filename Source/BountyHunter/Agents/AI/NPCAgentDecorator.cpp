@@ -56,3 +56,25 @@ const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& NPCAgentDecorator::Ge
 {
 	return mAgent->GetPredicates();
 }
+
+bool NPCAgentDecorator::IsStimulusAccepted(std::shared_ptr<NAI::Goap::IStimulus> stimulus) const
+{
+	return mAgent->IsStimulusAccepted(stimulus);
+}
+
+const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> NPCAgentDecorator::TransformStimulusIntoPredicates(
+	std::shared_ptr<NAI::Goap::IStimulus> stimulus) const
+{
+	return mAgent->TransformStimulusIntoPredicates(stimulus);
+}
+
+void NPCAgentDecorator::AddSensoryThreshold(const std::string& stimulusClassName,
+	std::shared_ptr<NAI::Goap::IThreshold> threshold)
+{
+	mAgent->AddSensoryThreshold(stimulusClassName, threshold);
+}
+
+std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> NPCAgentDecorator::GetSensoryThresholds() const
+{
+	return mAgent->GetSensoryThresholds();
+}

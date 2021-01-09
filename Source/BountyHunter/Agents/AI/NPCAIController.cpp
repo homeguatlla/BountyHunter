@@ -5,7 +5,7 @@
 #include <NAI/include/goap/planners/TreeGoapPlanner.h>
 
 #include <BountyHunter/BountyHunterGameMode.h>
-#include <BountyHunter/Agents/AgentBuilder.h>
+#include <BountyHunter/Agents/NPCAgentBuilder.h>
 #include <BountyHunter/Agents/AI/NPCAgent.h>
 #include <BountyHunter/utils/UtilsLibrary.h>
 
@@ -76,7 +76,7 @@ void ANPCAIController::CreateNavigationPlanner()
 
 void ANPCAIController::CreateAgent()
 {
-	AgentBuilder builder;
+	NPCAgentBuilder builder;
 
 	//const auto pathFollowingComponent = this->GetPathFollowingComponent();
 	auto acceptanceRadius = 100.0f; //pathFollowingComponent->GetAcceptanceRadius();
@@ -91,13 +91,13 @@ void ANPCAIController::CreateAgent()
 		if (gameMode->IsValidLowLevel())
 		{
 			const auto eventDispatcher = gameMode->GetEventDispatcher();
-			mAgent = builder.AddGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-				.AddController(this)
-				.AddGoal(goToGoal)
-				.AddPredicate(predicate1)
-				.AddPredicate(predicate2)
-				.AddEventDispatcher(eventDispatcher)
-				.Build<NPCAgent>();
+			mAgent =	builder.WithController(this)
+							   .WithEventDispatcher(eventDispatcher)
+							   .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
+							   .WithGoal(goToGoal)
+							   .WithPredicate(predicate1)
+							   .WithPredicate(predicate2)
+							   .Build<NPCAgent>();
 
 			mAgent->StartUp();
 		}

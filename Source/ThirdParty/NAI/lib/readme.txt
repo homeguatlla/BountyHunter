@@ -4,3 +4,4 @@ To create the library:
 -Properties of configuration/General configuration type, .lib
 -C/C++ Code generation/link execution time DLL multiproceso(/MD)
 -Linking General/ generacion de codigo en tiempo de vinculo Si(LTCG) (este estaba por defecto y sale un warning al compilar con unreal)
+-Luego cambiar el type de .lib a .dll

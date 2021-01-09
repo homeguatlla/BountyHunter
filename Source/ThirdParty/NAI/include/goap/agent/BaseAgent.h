@@ -8,6 +8,8 @@
 #include <vector>
 #include <memory>
 
+#include "goap/sensory/PerceptionSystem.h"
+
 
 namespace NAI
 {
@@ -19,8 +21,14 @@ namespace NAI
 		{
 		public:
 			BaseAgent(	std::shared_ptr<IGoapPlanner> goapPlanner, 
-						std::vector<std::shared_ptr<IGoal>>& goals, 
-						std::vector<std::shared_ptr<IPredicate>>& predicates);
+                        const std::vector<std::shared_ptr<IGoal>>& goals, 
+                        const std::vector<std::shared_ptr<IPredicate>>& predicates);
+			
+			BaseAgent(	std::shared_ptr<IGoapPlanner> goapPlanner, 
+						const std::vector<std::shared_ptr<IGoal>>& goals, 
+						const std::vector<std::shared_ptr<IPredicate>>& predicates,
+						const std::shared_ptr<PerceptionSystem> perceptionSystem);
+			
 			virtual ~BaseAgent() = default;
 
 			AgentState GetCurrentState() const override;
@@ -31,6 +39,10 @@ namespace NAI
 			void OnNewPredicate(std::shared_ptr<IPredicate> predicate) override;
 			const std::vector<std::shared_ptr<IGoal>>& GetGoals() const override { return mGoals; }
 			const std::vector<std::shared_ptr<IPredicate>>& GetPredicates() const override { return mPredicatesHandler.GetPredicatesList(); }
+			bool IsStimulusAccepted(std::shared_ptr<IStimulus> stimulus) const override;
+			const std::vector<std::shared_ptr<IPredicate>> TransformStimulusIntoPredicates(std::shared_ptr<IStimulus> stimulus) const override;
+			std::map<std::string, std::shared_ptr<IThreshold>> GetSensoryThresholds() const override { return mThresholds; }
+			void AddSensoryThreshold(const std::string& stimulusClassName, std::shared_ptr<IThreshold> threshold) override;
 		
 		private:
 			void CreateStatesMachine();
@@ -42,6 +54,8 @@ namespace NAI
 			std::shared_ptr<IGoapPlanner> mGoapPlanner;
 			PredicatesHandler mPredicatesHandler;
 			std::vector<std::shared_ptr<IGoal>> mGoals;
+			std::map<std::string, std::shared_ptr<IThreshold>> mThresholds;
+			std::shared_ptr<PerceptionSystem> mPerceptionSystem;
 		};
 	}
 }

@@ -3,6 +3,8 @@
 #include <NAI/include/goap/IGoapPlanner.h>
 #include "CoreMinimal.h"
 
+#include "goap/sensory/PerceptionSystem.h"
+
 class IAgentAIController;
 
 class NPCAgent : public NAI::Goap::BaseAgent
@@ -10,8 +12,14 @@ class NPCAgent : public NAI::Goap::BaseAgent
 public:
 
 	NPCAgent(std::shared_ptr<NAI::Goap::IGoapPlanner> goapPlanner,
+        std::vector<std::shared_ptr<NAI::Goap::IGoal>>& goals,
+        std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates,
+        IAgentAIController* controller);
+	
+	NPCAgent(std::shared_ptr<NAI::Goap::IGoapPlanner> goapPlanner,
 		std::vector<std::shared_ptr<NAI::Goap::IGoal>>& goals,
-		std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates, 
+		std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates,
+		std::shared_ptr<NAI::Goap::PerceptionSystem> perceptionSystem,
 		IAgentAIController* controller);
 	~NPCAgent() = default;
 
