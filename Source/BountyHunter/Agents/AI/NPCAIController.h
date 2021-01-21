@@ -7,6 +7,9 @@
 #include <memory>
 #include <BountyHunter/Agents/AI/IAgentAIController.h>
 #include <BountyHunter/Agents/Navigation/NavigationPlanner.h>
+
+#include "BountyHunter/Agents/NPCTypes.h"
+
 #include "NPCAIController.generated.h"
 
 namespace NAI { namespace Goap { class IAgent; } }
@@ -32,11 +35,10 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 		FString GetAgentCurrentState() const;
 		virtual FString GetAgentCurrentState_Implementation() const;
 
-private:
-		void CreateAgent();
+	private:
+		void CreateAgent(NPCTypes type);
 		void CreateNavigationPlanner();
 
-	private:
 		std::shared_ptr<NAI::Goap::IAgent> mAgent;
 		std::shared_ptr<NavigationPlanner> mNavigationPlanner;
 		FVector mLastPoint { FVector::ZeroVector} ;

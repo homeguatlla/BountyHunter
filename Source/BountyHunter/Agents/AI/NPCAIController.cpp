@@ -9,6 +9,8 @@
 #include <BountyHunter/Agents/AI/NPCAgent.h>
 #include <BountyHunter/utils/UtilsLibrary.h>
 
+
+#include "BountyHunter/Agents/NPCCharacter.h"
 #include "GameFramework/Character.h"
 #include "Runtime/AIModule/Classes/Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/World.h"
@@ -19,7 +21,11 @@ void ANPCAIController::BeginPlay()
 	Super::BeginPlay();
 	
 	CreateNavigationPlanner();
-	CreateAgent();
+
+	auto npcCharacter = Cast<ANPCCharacter>(GetCharacter());
+	check(npcCharacter != nullptr);
+	
+	CreateAgent(npcCharacter->GetNPCType());
 }
 
 void ANPCAIController::Tick(float DeltaTime)
@@ -74,7 +80,7 @@ void ANPCAIController::CreateNavigationPlanner()
 	mNavigationPlanner = std::make_shared<NavigationPlanner>(GetWorld());
 }
 
-void ANPCAIController::CreateAgent()
+void ANPCAIController::CreateAgent(NPCTypes type)
 {
 	NPCAgentBuilder builder;
 
