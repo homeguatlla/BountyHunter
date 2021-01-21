@@ -18,9 +18,7 @@ public:
 	void OnNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
 	const std::vector<std::shared_ptr<NAI::Goap::IGoal>>& GetGoals() const override;
 	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& GetPredicates() const override;
-	bool IsStimulusAccepted(std::shared_ptr<NAI::Goap::IStimulus> stimulus) const override;
-	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> TransformStimulusIntoPredicates(
-		std::shared_ptr<NAI::Goap::IStimulus> stimulus) const override;
+	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> TransformStimulusIntoPredicates(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const override;
 	void AddSensoryThreshold(const std::string& stimulusClassName,
 		std::shared_ptr<NAI::Goap::IThreshold> threshold) override;
 	std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> GetSensoryThresholds() const override;
