@@ -1,4 +1,6 @@
 #include "NPCAIController.h"
+
+#include <concrt.h>
 #include <NAI/include/goap/IGoapPlanner.h>
 #include <NAI/include/goap/goals/GoToGoal.h>
 #include <NAI/include/goap/predicates/GoToPredicate.h>
@@ -10,6 +12,8 @@
 #include <BountyHunter/utils/UtilsLibrary.h>
 
 
+
+#include "BountyHunter/Agents/NPCAgentFactory.h"
 #include "BountyHunter/Agents/NPCCharacter.h"
 #include "GameFramework/Character.h"
 #include "Runtime/AIModule/Classes/Blueprint/AIBlueprintHelperLibrary.h"
@@ -97,13 +101,8 @@ void ANPCAIController::CreateAgent(NPCTypes type)
 		if (gameMode->IsValidLowLevel())
 		{
 			const auto eventDispatcher = gameMode->GetEventDispatcher();
-			mAgent =	builder.WithController(this)
-							   .WithEventDispatcher(eventDispatcher)
-							   .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-							   .WithGoal(goToGoal)
-							   .WithPredicate(predicate1)
-							   .WithPredicate(predicate2)
-							   .Build<NPCAgent>();
+			NPCAgentFactory factory(eventDispatcher, mNavigationPlanner);
+			mAgent = factory.CreateAgent(type, this);
 
 			mAgent->StartUp();
 		}

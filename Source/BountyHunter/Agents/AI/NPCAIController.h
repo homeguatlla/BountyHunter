@@ -40,6 +40,6 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 		void CreateNavigationPlanner();
 
 		std::shared_ptr<NAI::Goap::IAgent> mAgent;
-		std::shared_ptr<NavigationPlanner> mNavigationPlanner;
+		std::shared_ptr<NAI::Navigation::INavigationPlanner> mNavigationPlanner;
 		FVector mLastPoint { FVector::ZeroVector} ;
 };
