@@ -20,28 +20,38 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateAgent(
 	NPCTypes type,
 	ANPCAIController* controller)
 {
-	NPCAgentBuilder builder;
-	
 	switch (type) {
 	case Human:
-		{
-			auto acceptanceRadius = 100.0f;
-			const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
-			const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
-			const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
-			return builder.WithController(controller)
-                          .WithEventDispatcher(mEventDispatcher)
-                          .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-                          .WithGoal(goToGoal)
-                          .WithPredicate(predicate1)
-                          .WithPredicate(predicate2)
-                          .Build<NPCAgent>();
-		}
+		return CreateHuman(controller);
 	case Chicken:
 	default:
-		return builder.WithController(controller)
-                      .WithEventDispatcher(mEventDispatcher)
-					  .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-                      .Build<NPCAgent>();
+		return CreateChicken(controller);
 	}
+}
+
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController* controller)
+{
+	NPCAgentBuilder builder;
+	
+	auto acceptanceRadius = 100.0f;
+	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
+	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
+	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
+	return builder.WithController(controller)
+                  .WithEventDispatcher(mEventDispatcher)
+                  .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
+                  .WithGoal(goToGoal)
+                  .WithPredicate(predicate1)
+                  .WithPredicate(predicate2)
+                  .Build<NPCAgent>();
+}
+
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller)
+{
+	NPCAgentBuilder builder;
+	
+	return builder.WithController(controller)
+                      .WithEventDispatcher(mEventDispatcher)
+                      .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
+                      .Build<NPCAgent>();
 }
