@@ -4,6 +4,12 @@
 class FoodStimulus : public VisionStimulus
 {
 public:
-	FoodStimulus() = default;
+	FoodStimulus(const glm::vec3& position, unsigned int amount) :
+		VisionStimulus(position), mAmount { amount } {}
 	virtual ~FoodStimulus() = default;
+
+	unsigned int GetAmount() const { return mAmount; }
+
+private:
+	unsigned int mAmount;
 };

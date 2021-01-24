@@ -3,11 +3,13 @@
 
 #include "AI/NPCAgent.h"
 #include "AI/NPCAIController.h"
+#include "AI/Goals/EatGoal.h"
 
-#include "goap/agent/AgentBuilder.h"
-#include "goap/goals/GoToGoal.h"
-#include "goap/planners/TreeGoapPlanner.h"
-#include "goap/predicates/GoToPredicate.h"
+#include <goap/goals/GoToGoal.h>
+#include <goap/planners/TreeGoapPlanner.h>
+#include <goap/predicates/GoToPredicate.h>
+
+#include "AI/Predicates/Predicates.h"
 
 
 NPCAgentFactory::NPCAgentFactory(AEventDispatcher* eventDispatcher,std::shared_ptr<NAI::Navigation::INavigationPlanner> planner) :
@@ -29,7 +31,7 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateAgent(
 	}
 }
 
-std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController* controller)
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController* controller) const
 {
 	NPCAgentBuilder builder;
 	
@@ -46,12 +48,14 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController
                   .Build<NPCAgent>();
 }
 
-std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller)
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller) const
 {
 	NPCAgentBuilder builder;
 	
-	return builder.WithController(controller)
-                      .WithEventDispatcher(mEventDispatcher)
-                      .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-                      .Build<NPCAgent>();
+	return	builder.WithController(controller)
+					.WithEventDispatcher(mEventDispatcher)
+					.WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
+					.WithGoal(std::make_shared<EatGoal>())
+					.WithPredicate(IM_HUNGRY_PREDICATE)
+                    .Build<NPCAgent>();
 }
