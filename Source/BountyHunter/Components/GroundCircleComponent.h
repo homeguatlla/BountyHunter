@@ -7,6 +7,7 @@
 #include "Components/DecalComponent.h"
 #include "GroundCircleComponent.generated.h"
 
+class ANPCAIController;
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BOUNTYHUNTER_API UGroundCircleComponent : public UDecalComponent
 {

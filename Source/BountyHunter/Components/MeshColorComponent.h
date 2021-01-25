@@ -7,6 +7,7 @@
 #include "Components/ActorComponent.h"
 #include "MeshColorComponent.generated.h"
 
+class ANPCAIController;
 class UMaterialInstanceDynamic;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

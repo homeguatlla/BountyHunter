@@ -10,6 +10,10 @@
 #include <goap/sensory/IStimulus.h>
 #include <algorithm>
 
+EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
+{
+}
+
 void EatGoal::DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent)
 {
 	mAgent = agent;
@@ -71,5 +75,5 @@ std::shared_ptr<NAI::Goap::IAction> EatGoal::CreateEatAction()
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
 
 	unsigned int cost = 0;
-	return std::make_shared<EatAction>(preConditions, postConditions, cost);       
+	return std::make_shared<EatAction>(preConditions, postConditions, cost, mEatComponent);       
 }
