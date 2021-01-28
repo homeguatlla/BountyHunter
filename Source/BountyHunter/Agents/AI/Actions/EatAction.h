@@ -12,7 +12,7 @@ namespace NAI {
 class EatAction : public NAI::Goap::BaseAction
 {
 public:
-	EatAction(const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& preConditions,
+	EatAction(const std::vector<std::string>& preConditions,
             const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& postConditions,
             unsigned int cost,
             UEatComponent* eatComponent);

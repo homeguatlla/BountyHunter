@@ -1,33 +1,34 @@
 ﻿
 #include "EatComponent.h"
+#include "BountyHunter/Agents/AI/IAgentAIController.h"
+#include "BountyHunter/Agents/AI/NPCAIController.h"
+#include "BountyHunter/Agents/AI/Predicates/Predicates.h"
+#include "GameFramework/Actor.h"
+#include "goap/BasePredicate.h"
 
 
 UEatComponent::UEatComponent() :
-mHasHungry{false},
-mIsEating{false},
-mAmount{0}
+AccumulatedTimeToStartHavingHungry{1.0f},
+mAmount{0},
+mEatingTime{0.0f}
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
-
-void UEatComponent::Eat(unsigned amount)
+void UEatComponent::Eat(unsigned int amount)
 {
+	check(amount > 0);
+	
 	mAmount = amount;
-	PrimaryComponentTick.bCanEverTick = true;
+	//SetComponentTickEnabled(true);
+	mEatingTime = EatingSpeed;
 }
 
 // Called when the game starts
 void UEatComponent::BeginPlay()
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	Super::BeginPlay();	
 }
 
 
@@ -36,6 +37,46 @@ void UEatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if(IsEating())
+	{
+		UpdateEating(DeltaTime);
+	}
+	else if(!HasHungry())
+	{
+		UpdateHungry(DeltaTime);
+	}
+}
+
+void UEatComponent::UpdateEating(float elapsedTime)
+{
+	mEatingTime -= elapsedTime;
+	if(mEatingTime <= 0.0f)
+	{
+		mAmount--;
+		AccumulatedTimeToStartHavingHungry += TimeWithoutHungryPerAmountEaten;
+		mEatingTime = mAmount <= 0 ? mEatingTime = 0.0f : mEatingTime = EatingSpeed;
+	}
+}
+
+void UEatComponent::UpdateHungry(float elapsedTime)
+{
+	AccumulatedTimeToStartHavingHungry -= elapsedTime;
+	if(AccumulatedTimeToStartHavingHungry <= 0.0f)
+	{
+		AddHungryPredicateToAgent();
+	}
+}
+
+void UEatComponent::AddHungryPredicateToAgent()
+{
+	auto actor = GetOwner();
 	
+	auto controller = actor->GetInstigatorController<IAgentAIController>();
+
+	if(controller != nullptr)
+	{
+		auto npcController = Cast<ANPCAIController>(controller);
+		npcController->AddNewPredicate(std::make_shared<NAI::Goap::BasePredicate>(IM_HUNGRY_PREDICATE_NAME));
+	}
 }
 

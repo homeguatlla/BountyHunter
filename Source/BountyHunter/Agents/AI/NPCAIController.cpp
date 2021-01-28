@@ -79,6 +79,13 @@ FString ANPCAIController::GetAgentCurrentState_Implementation() const
 	return utils::UtilsLibrary::ConvertToFString(NAI::Goap::AgentStateMap[mAgent->GetCurrentState()]);
 }
 
+void ANPCAIController::AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
+{
+	assert(mAgent != nullptr);
+	
+	mAgent->OnNewPredicate(predicate);
+}
+
 void ANPCAIController::CreateNavigationPlanner()
 {
 	mNavigationPlanner = std::make_shared<NavigationPlanner>(GetWorld());
@@ -86,13 +93,6 @@ void ANPCAIController::CreateNavigationPlanner()
 
 void ANPCAIController::CreateAgent(NPCTypes type)
 {
-	NPCAgentBuilder builder;
-
-	//const auto pathFollowingComponent = this->GetPathFollowingComponent();
-	auto acceptanceRadius = 100.0f; //pathFollowingComponent->GetAcceptanceRadius();
-	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
-	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
-	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
 	const auto world = GetWorld();
 	if(world->IsValidLowLevel())
 	{

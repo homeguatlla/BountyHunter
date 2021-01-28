@@ -9,6 +9,8 @@
 #include <BountyHunter/Agents/Navigation/NavigationPlanner.h>
 
 #include "BountyHunter/Agents/NPCTypes.h"
+#include "goap/IPredicate.h"
+
 
 #include "NPCAIController.generated.h"
 
@@ -34,6 +36,8 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 		UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Agent Controller")
 		FString GetAgentCurrentState() const;
 		virtual FString GetAgentCurrentState_Implementation() const;
+
+		void AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
 
 	private:
 		void CreateAgent(NPCTypes type);

@@ -9,11 +9,14 @@
 #include <goap/planners/TreeGoapPlanner.h>
 #include <goap/predicates/GoToPredicate.h>
 
+
+#include "AI/Predicates/FoodPredicate.h"
 #include "AI/Predicates/Predicates.h"
 
 #include "Components/EatComponent.h"
 
 #include "GameFramework/Character.h"
+#include "goap/BasePredicate.h"
 
 
 NPCAgentFactory::NPCAgentFactory(AEventDispatcher* eventDispatcher,std::shared_ptr<NAI::Navigation::INavigationPlanner> planner) :
@@ -59,11 +62,11 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 	const auto character = controller->GetCharacter();
 	auto eatComponent = character->FindComponentByClass<UEatComponent>();
 	assert(eatComponent != nullptr);
-	
+
 	return	builder.WithController(controller)
 					.WithEventDispatcher(mEventDispatcher)
 					.WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
 					.WithGoal(std::make_shared<EatGoal>(eatComponent))
-					.WithPredicate(IM_HUNGRY_PREDICATE)
+					.WithPredicate(std::make_shared<FoodPredicate>(glm::vec3(0.0f), 1))
                     .Build<NPCAgent>();
 }

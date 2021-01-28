@@ -10,6 +10,10 @@
 #include <goap/sensory/IStimulus.h>
 #include <algorithm>
 
+
+#include "goap/IPredicate.h"
+#include "goap/PredicatesHandler.h"
+
 EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
 {
 }
@@ -17,6 +21,7 @@ EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
 void EatGoal::DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent)
 {
 	mAgent = agent;
+	Reset();
 }
 
 void EatGoal::DoReset()
@@ -27,6 +32,7 @@ void EatGoal::DoReset()
 void EatGoal::DoAccomplished(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
 	NAI::Goap::Utils::RemovePredicateWith(predicates, FOOD_PREDICATE_NAME);
+	NAI::Goap::Utils::RemovePredicateWith(predicates, IM_HUNGRY_PREDICATE_NAME);
 }
 
 std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicates(
@@ -55,10 +61,7 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
                 return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
             });
 
-	FOOD_PREDICATE->SetPosition(foodStimulusList[0]->GetPosition());
-	FOOD_PREDICATE->SetAmount(foodStimulusList[0]->GetAmount());
-
-	return FOOD_PREDICATE;
+	return std::make_shared<FoodPredicate>(foodStimulusList[0]->GetPosition(), foodStimulusList[0]->GetAmount());
 }
 
 void EatGoal::AddActions()
@@ -69,9 +72,7 @@ void EatGoal::AddActions()
 
 std::shared_ptr<NAI::Goap::IAction> EatGoal::CreateEatAction()
 {
-	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> preConditions = {
-			std::make_shared<FoodPredicate>(),
-			std::make_shared<ImHungryPredicate>() };
+	std::vector<std::string> preConditions = { FOOD_PREDICATE_NAME, IM_HUNGRY_PREDICATE_NAME };
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
 
 	unsigned int cost = 0;
