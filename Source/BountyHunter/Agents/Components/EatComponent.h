@@ -16,7 +16,7 @@ public:
 	// Sets default values for this component's properties
 	UEatComponent();
 
-	bool HasHungry() const { return !IsEating() && AccumulatedTimeToStartHavingHungry <= 0.0f; }
+	bool HasHungry() const { return !IsEating() && AccumulatedTimeToStartHavingHungry <= MinAccumulatedTimeToBeFull; }
 	bool IsEating() const { return mEatingTime > 0.0f; }
 	void Eat(unsigned int amount);
 	
@@ -31,8 +31,12 @@ public:
 	/** Time in seconds the agent can stay without eat */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
 	float AccumulatedTimeToStartHavingHungry;
-	
-protected:
+
+	/** Time in seconds the agent can stay without eat */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
+	float MinAccumulatedTimeToBeFull;
+
+	protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
