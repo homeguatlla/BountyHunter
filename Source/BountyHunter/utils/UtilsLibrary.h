@@ -1,16 +1,16 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Kismet/GameplayStatics.h"
-#include <BountyHunter/Agents/AI/NPCAIController.h>
-#include <vector>
 #include <string>
+
+#include "Engine/World.h"
 
 namespace utils
 {
 class UtilsLibrary
 {
 	public:
-		//estod métodos probablemente sean estáticos en alguna libreria-
+		//estod mï¿½todos probablemente sean estï¿½ticos en alguna libreria-
 		template <class InterfaceTypeSource, class InterfaceTypeTarget = InterfaceTypeSource>
 		static InterfaceTypeTarget* CreateHUDFromClass(int hudIndex, const FString& name, APlayerController* playerController, TSubclassOf<InterfaceTypeSource> hudClass, bool autoAddToViewport = true, int32 zOrder = 0)
 		{
@@ -59,6 +59,39 @@ class UtilsLibrary
 		static std::string ConvertToString(const FString& text)
 		{
 			return std::string(TCHAR_TO_UTF8(*text));
+		}
+
+	static TArray<FHitResult> TraceVisionBox(
+		UWorld* world,
+        const FVector& startLocation,
+        const FVector& endLocation,
+        const FVector& halfExtend,
+        const FQuat& rotation,
+        ECollisionChannel channel)
+		{
+			const auto shape = FCollisionShape::MakeBox(halfExtend);
+			return TraceSweepMultyByChannel(world, startLocation, endLocation, rotation, channel, shape);
+		}
+	
+		static TArray<FHitResult> TraceSweepMultyByChannel(
+			UWorld* world,
+			const FVector& startLocation,
+			const FVector& endLocation,
+			const FQuat& rotation,
+			ECollisionChannel channel,
+			const FCollisionShape& shape) 
+		{
+			TArray<FHitResult> outHits;
+			
+			auto result = world->SweepMultiByChannel(
+				outHits,
+				startLocation,
+				endLocation,
+				rotation,
+				channel,
+				shape);
+
+			return outHits;
 		}
 };
 }

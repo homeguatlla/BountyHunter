@@ -67,16 +67,9 @@ void UEatComponent::UpdateHungry(float elapsedTime)
 	}
 }
 
-void UEatComponent::AddHungryPredicateToAgent()
+void UEatComponent::AddHungryPredicateToAgent() const
 {
-	auto actor = GetOwner();
-	
-	auto controller = actor->GetInstigatorController<IAgentAIController>();
-
-	if(controller != nullptr)
-	{
-		auto npcController = Cast<ANPCAIController>(controller);
-		npcController->AddNewPredicate(std::make_shared<NAI::Goap::BasePredicate>(IM_HUNGRY_PREDICATE_NAME));
-	}
+	auto controller = GetNPCAIController();
+	controller->AddNewPredicate(std::make_shared<NAI::Goap::BasePredicate>(IM_HUNGRY_PREDICATE_NAME));
 }
 

@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "BountyHunter/Agents/Components/NPCAgentComponent.h"
 #include "EatComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UEatComponent : public UActorComponent
+class BOUNTYHUNTER_API UEatComponent : public UNPCAgentComponent
 {
 	GENERATED_BODY()
 
@@ -47,7 +47,7 @@ public:
 private:
 	void UpdateEating(float elapsedTime);
 	void UpdateHungry(float elapsedTime);
-	void AddHungryPredicateToAgent();
+	void AddHungryPredicateToAgent() const;
 
 	unsigned int mAmount;
 	float mEatingTime;
