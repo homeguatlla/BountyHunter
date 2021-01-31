@@ -61,15 +61,15 @@ class UtilsLibrary
 			return std::string(TCHAR_TO_UTF8(*text));
 		}
 
-	static TArray<FHitResult> TraceVisionBox(
+	static TArray<FHitResult> TraceVisionSphere(
 		UWorld* world,
         const FVector& startLocation,
         const FVector& endLocation,
-        const FVector& halfExtend,
+        const float radius,
         const FQuat& rotation,
         ECollisionChannel channel)
 		{
-			const auto shape = FCollisionShape::MakeBox(halfExtend);
+			const auto shape = FCollisionShape::MakeSphere(radius);
 			return TraceSweepMultyByChannel(world, startLocation, endLocation, rotation, channel, shape);
 		}
 	

@@ -18,9 +18,13 @@ private:
 		ANPCAIController* GetNPCAIController() const { return mNPCAIController; }
 
 		void BeginPlay() override;
+
+		FVector GetActorHeadLocation() const { return mActorHeadLocation; }
 	
 	private:
 		void SaveNPCAIController();
-
+		void SaveActorHeadLocation();
+	
 	ANPCAIController* mNPCAIController;
+	FVector mActorHeadLocation;
 };

@@ -17,11 +17,14 @@ class BOUNTYHUNTER_API UVisionComponent : public UNPCAgentComponent
 public:
 	UVisionComponent();
 
+	/** Radius of the sphere volume to propagate from head to length of view */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
+	float Radius;
+	
 	/** Length of view */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
 	int LengthOfView;
-	
-public:
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 };
