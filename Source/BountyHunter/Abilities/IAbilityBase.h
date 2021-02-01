@@ -1,8 +1,6 @@
 #pragma once
 #include "CoreMinimal.h"
-#include <BountyHunter/Abilities/IAbility.h>
-#include <BountyHunter/Abilities/AbilitityBase.h>
-
+#include "UObject/Interface.h"
 #include "IAbilityBase.generated.h"
 
 UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))

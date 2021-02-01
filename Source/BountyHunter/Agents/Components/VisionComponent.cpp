@@ -2,10 +2,13 @@
 
 
 #include "DrawDebugHelpers.h"
+#include "InteractableComponent.h"
 #include "BountyHunter/utils/UtilsLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "BountyHunter/CustomTypes.h"
+#include "BountyHunter/Agents/AI/NPCAIController.h"
 #include "Engine/Engine.h"
+#include "GameFramework/Character.h"
 
 using namespace utils;
 
@@ -30,34 +33,45 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 	auto hitResults = UtilsLibrary::TraceVisionSphere(GetWorld(), head, pointOfSight, Radius, FQuat::Identity, channel, params);
 
+	// loop through TArray
+	for (auto&& hit : hitResults)
+	{
+		if (GEngine) 
+		{
+			const auto interactableComponent = hit.Actor->FindComponentByClass<UInteractableComponent>();
+			if(interactableComponent != nullptr)
+			{
+				auto stimulus = interactableComponent->CreateStimulus();
+				
+				if(IsDebug)
+				{
+					auto name = hit.Actor->GetName();
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Hit Result: %s"), *name));
+					DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, FColor::Red, true);
+				}
+			}
+		}			
+	}
+	
+	//Box oriented
+	if(IsDebug)
+	{
+		DrawDebugLines(head, pointOfSight, rotation, forward);
+	}
+	//TODO
+	// ver como se transforma en estímulo
+}
+
+void UVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation, const FVector& forward)
+{
 	DrawDebugSphere(GetWorld(), head, 10.0f, 20.0f, FColor::Black);
 	DrawDebugSphere(GetWorld(), pointOfSight, 5.0f, 20.0f, FColor::Blue);
 	DrawDebugLine(GetWorld(), head, pointOfSight, FColor::Blue);
 
-	//Box oriented
 	const auto halfExtend = FVector(10.0f, Radius, Radius);
 	const auto halfExtendOriented = rotation.RotateVector(halfExtend);
 	
 	const auto halfLength = LengthOfView * forward * 0.5f;
 	DrawDebugBox(GetWorld(), head, halfExtendOriented, FColor::Purple, true);
 	DrawDebugBox(GetWorld(), head+halfLength, halfExtendOriented + halfLength, FColor::Red, true);
-
-	//TODO
-	// ver como se transforma en estímulo
-	
-	
-	// loop through TArray
-	for (auto&& hit : hitResults)
-	{
-		if (GEngine) 
-		{
-			// screen log information on what was hit
-			auto name = hit.Actor->GetName();
-			if(!name.Contains("Landscape"))
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Hit Result: %s"), *name));
-				DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, FColor::Red, true);
-			}
-		}						
-	}
 }

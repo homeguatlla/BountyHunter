@@ -1,35 +1,17 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
+﻿
 #include "FoodComponent.h"
 
+#include "BountyHunter/Stimulus/FoodStimulus.h"
+#include "BountyHunter/utils/UtilsLibrary.h"
 
-// Sets default values for this component's properties
+
 UFoodComponent::UFoodComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
 }
 
-
-// Called when the game starts
-void UFoodComponent::BeginPlay()
+std::shared_ptr<NAI::Goap::IStimulus> UFoodComponent::CreateStimulus() const
 {
-	Super::BeginPlay();
-
-	// ...
-	
+	const auto location = GetOwner()->GetActorLocation();
+	return std::make_shared<FoodStimulus>(utils::UtilsLibrary::ConvertToVec3(location), Amount);
 }
-
-
-// Called every frame
-void UFoodComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

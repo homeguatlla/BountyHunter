@@ -1,11 +1,9 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Kismet/GameplayStatics.h"
-#include <string>
-
-
-#include "XAudio2Device.h"
 #include "Engine/World.h"
+#include <glm/glm.hpp>
+#include <string>
 
 namespace utils
 {
@@ -63,14 +61,24 @@ class UtilsLibrary
 			return std::string(TCHAR_TO_UTF8(*text));
 		}
 
-	static TArray<FHitResult> TraceVisionSphere(
-		UWorld* world,
-        const FVector& startLocation,
-        const FVector& endLocation,
-        const float radius,
-        const FQuat& rotation,
-        ECollisionChannel channel,
-        const FCollisionQueryParams& params)
+		static FVector ConvertToFVector(const glm::vec3& v)
+		{
+			return FVector(v.x, v.y, v.z);
+		}
+
+		static glm::vec3 ConvertToVec3(const FVector& v)
+		{
+			return glm::vec3(v.X, v.Y, v.Z);
+		}
+	
+		static TArray<FHitResult> TraceVisionSphere(
+			UWorld* world,
+	        const FVector& startLocation,
+	        const FVector& endLocation,
+	        const float radius,
+	        const FQuat& rotation,
+	        ECollisionChannel channel,
+	        const FCollisionQueryParams& params)
 		{
 			const auto shape = FCollisionShape::MakeSphere(radius);
 			return TraceSweepMultyByChannel(world, startLocation, endLocation, rotation, channel, shape, params);

@@ -8,6 +8,7 @@ public:
 		VisionStimulus(position), mAmount { amount } {}
 	virtual ~FoodStimulus() = default;
 
+	std::string GetClassName() const override { return "FoodStimulus"; }
 	unsigned int GetAmount() const { return mAmount; }
 
 private:

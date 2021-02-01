@@ -9,15 +9,14 @@
 #include <goap/planners/TreeGoapPlanner.h>
 #include <goap/predicates/GoToPredicate.h>
 
-
 #include "AI/Predicates/FoodPredicate.h"
-#include "AI/Predicates/Predicates.h"
-
+#include "BountyHunter/Stimulus/FoodStimulus.h"
+#include "BountyHunter/Thresholds/FoodThreshold.h"
 #include "Components/EatComponent.h"
-
 #include "GameFramework/Character.h"
-#include "goap/BasePredicate.h"
-
+#include "goap/sensory/IStimulus.h"
+#include "goap/sensory/PerceptionSystem.h"
+#include "goap/sensory/SensorySystem.h"
 
 NPCAgentFactory::NPCAgentFactory(AEventDispatcher* eventDispatcher,std::shared_ptr<NAI::Navigation::INavigationPlanner> planner) :
 mEventDispatcher{eventDispatcher},
@@ -63,10 +62,16 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 	auto eatComponent = character->FindComponentByClass<UEatComponent>();
 	assert(eatComponent != nullptr);
 
+	auto sensorySystem = std::make_shared<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>>();
+	
+	//el VisionComponent debe heredar de BaseSensor
+	//El SensorySystem se tiene que suscribir a VisionComponent
 	return	builder.WithController(controller)
 					.WithEventDispatcher(mEventDispatcher)
 					.WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
 					.WithGoal(std::make_shared<EatGoal>(eatComponent))
 					.WithPredicate(std::make_shared<FoodPredicate>(glm::vec3(0.0f), 1))
+					.WithPerceptionSystem(sensorySystem)
+					.WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
                     .Build<NPCAgent>();
 }
