@@ -3,6 +3,8 @@
 #include "Kismet/GameplayStatics.h"
 #include <string>
 
+
+#include "XAudio2Device.h"
 #include "Engine/World.h"
 
 namespace utils
@@ -67,10 +69,11 @@ class UtilsLibrary
         const FVector& endLocation,
         const float radius,
         const FQuat& rotation,
-        ECollisionChannel channel)
+        ECollisionChannel channel,
+        const FCollisionQueryParams& params)
 		{
 			const auto shape = FCollisionShape::MakeSphere(radius);
-			return TraceSweepMultyByChannel(world, startLocation, endLocation, rotation, channel, shape);
+			return TraceSweepMultyByChannel(world, startLocation, endLocation, rotation, channel, shape, params);
 		}
 	
 		static TArray<FHitResult> TraceSweepMultyByChannel(
@@ -79,17 +82,20 @@ class UtilsLibrary
 			const FVector& endLocation,
 			const FQuat& rotation,
 			ECollisionChannel channel,
-			const FCollisionShape& shape) 
+			const FCollisionShape& shape,
+			const FCollisionQueryParams& params) 
 		{
 			TArray<FHitResult> outHits;
-			
+
+			//auto result = world->SweepMultiByObjectType(outHits, startLocation, endLocation, rotation, CHANNELOUT_LEFTSURROUND, shape, params);
 			auto result = world->SweepMultiByChannel(
 				outHits,
 				startLocation,
 				endLocation,
 				rotation,
 				channel,
-				shape);
+				shape,
+				params);
 
 			return outHits;
 		}

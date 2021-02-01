@@ -1,5 +1,7 @@
 ﻿
 #include "NPCAgentComponent.h"
+
+#include "BountyHunter/Agents/AgentsConstants.h"
 #include "BountyHunter/Agents/AI/IAgentAIController.h"
 #include "BountyHunter/Agents/AI/NPCAIController.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -31,7 +33,7 @@ void UNPCAgentComponent::SaveNPCAIController()
 void UNPCAgentComponent::SaveActorHeadLocation()
 {
 	const auto skeletalMeshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
-	mActorHeadLocation = skeletalMeshComponent->GetBoneLocation(FName("b_Head"));
+	mActorHeadLocation = skeletalMeshComponent->GetBoneLocation(AGENT_HEAD_BONE_NAME);
 }
 
 

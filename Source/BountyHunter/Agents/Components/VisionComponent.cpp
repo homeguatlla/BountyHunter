@@ -4,6 +4,7 @@
 #include "DrawDebugHelpers.h"
 #include "BountyHunter/utils/UtilsLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "BountyHunter/CustomTypes.h"
 #include "Engine/Engine.h"
 
 using namespace utils;
@@ -23,8 +24,11 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	const auto rotation = GetOwner()->GetActorRotation();
 	const auto pointOfSight = head + LengthOfView * forward;
 	
-	const auto channel = ECollisionChannel::ECC_Visibility;
-	auto hitResults = UtilsLibrary::TraceVisionSphere(GetWorld(), head, pointOfSight, Radius, FQuat::Identity, channel);
+	const auto channel = ECollisionChannel::ECC_VIEWABLE;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(GetOwner());
+	
+	auto hitResults = UtilsLibrary::TraceVisionSphere(GetWorld(), head, pointOfSight, Radius, FQuat::Identity, channel, params);
 
 	DrawDebugSphere(GetWorld(), head, 10.0f, 20.0f, FColor::Black);
 	DrawDebugSphere(GetWorld(), pointOfSight, 5.0f, 20.0f, FColor::Blue);
@@ -39,7 +43,6 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	DrawDebugBox(GetWorld(), head+halfLength, halfExtendOriented + halfLength, FColor::Red, true);
 
 	//TODO
-	// definir el channel
 	// ver como se transforma en estímulo
 	
 	
