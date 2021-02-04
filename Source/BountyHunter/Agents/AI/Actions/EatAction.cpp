@@ -27,13 +27,16 @@ void EatAction::DoProcess(float elapsedTime)
 		{
 			mEatComponent->Eat(foodPredicate->GetAmount());
 			UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] HasHungry"));
-			foodPredicate->GetActor()->Destroy();
-			UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Food Actor destroyed"));
 		}
 	}
 	else if(!mEatComponent->IsEating())
 	{
 		mHasAccomplished = true;
+		const auto predicateMatch = GetPredicateMatchedPreconditionWithText(FOOD_PREDICATE_NAME);
+		const auto foodPredicate = std::static_pointer_cast<FoodPredicate>(predicateMatch);
+		
+		foodPredicate->GetActor()->Destroy();
+		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Food Actor destroyed"));
 		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Not eating -> accomplished"));
 	}
 }
