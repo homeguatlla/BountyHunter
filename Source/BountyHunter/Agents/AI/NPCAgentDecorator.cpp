@@ -47,6 +47,11 @@ void NPCAgentDecorator::OnNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> pr
 	mAgent->OnNewPredicate(predicate);
 }
 
+void NPCAgentDecorator::OnUpdatePredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
+{
+	mAgent->OnUpdatePredicate(predicate);
+}
+
 const std::vector<std::shared_ptr<NAI::Goap::IGoal>>& NPCAgentDecorator::GetGoals() const
 {
 	return mAgent->GetGoals();
@@ -72,4 +77,9 @@ void NPCAgentDecorator::AddSensoryThreshold(const std::string& stimulusClassName
 std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> NPCAgentDecorator::GetSensoryThresholds() const
 {
 	return mAgent->GetSensoryThresholds();
+}
+
+void NPCAgentDecorator::RemovePredicate(int id)
+{
+	mAgent->RemovePredicate(id);
 }

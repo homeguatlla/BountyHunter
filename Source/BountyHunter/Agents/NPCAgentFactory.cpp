@@ -14,6 +14,8 @@
 #include <BountyHunter/Stimulus/FoodStimulus.h>
 #include <BountyHunter/Thresholds/FoodThreshold.h>
 
+
+#include "AI/Predicates/Predicates.h"
 #include "Components/EatComponent.h"
 #include "GameFramework/Character.h"
 
@@ -44,8 +46,8 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController
 	
 	auto acceptanceRadius = 100.0f;
 	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
-	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "GeneralStore");
-	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>("GoTo", "Saloon");
+	const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, "GoTo", "GeneralStore");
+	const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID + 1, "GoTo", "Saloon");
 	return builder.WithController(controller)
                   .WithEventDispatcher(mEventDispatcher)
                   .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())

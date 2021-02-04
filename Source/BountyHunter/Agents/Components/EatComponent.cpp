@@ -75,6 +75,6 @@ void UEatComponent::UpdateHungry(float elapsedTime)
 void UEatComponent::AddHungryPredicateToAgent() const
 {
 	auto controller = GetNPCAIController();
-	controller->AddNewPredicate(std::make_shared<NAI::Goap::BasePredicate>(IM_HUNGRY_PREDICATE_NAME));
+	controller->AddNewPredicate(std::make_shared<NAI::Goap::BasePredicate>(IM_HUNGRY_PREDICATE_ID, IM_HUNGRY_PREDICATE_NAME));
 }
 

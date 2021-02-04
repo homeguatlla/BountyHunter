@@ -11,7 +11,7 @@ namespace NAI {
 class ImHungryPredicate : public NAI::Goap::BasePredicate
 {
 public:
-	ImHungryPredicate();
+	ImHungryPredicate(int id);
 	virtual ~ImHungryPredicate() = default;
 
 	bool HasHungry(std::shared_ptr<NAI::Goap::IAgent> agent) const;

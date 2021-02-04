@@ -16,12 +16,14 @@ public:
 	bool HasPredicate(int predicateID) const override;
 	std::string WhereIam() const override;
 	void OnNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
+	void OnUpdatePredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
 	const std::vector<std::shared_ptr<NAI::Goap::IGoal>>& GetGoals() const override;
 	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& GetPredicates() const override;
 	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> TransformStimulusIntoPredicates(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const override;
 	void AddSensoryThreshold(const std::string& stimulusClassName,
 		std::shared_ptr<NAI::Goap::IThreshold> threshold) override;
 	std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> GetSensoryThresholds() const override;
+	void RemovePredicate(int id) override;
 
 	bool IsEnabled() const { return mIsEnabled; }
 	void SetEnabled(bool enabled) { mIsEnabled = enabled; }

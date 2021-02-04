@@ -46,8 +46,11 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
 			if(stimulus->GetClassName() == typeid(FoodStimulus).name())
 			{
 				const auto foodStimulus = std::static_pointer_cast<FoodStimulus>(stimulus);
-				foodStimulusList.push_back(foodStimulus);
-				return true;
+				if(foodStimulus->IsActorAlive())
+				{
+					foodStimulusList.push_back(foodStimulus);
+					return true;
+				}
 			}
 			return false;
 		});
@@ -61,7 +64,11 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
                 return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
             });
 	
-	return std::make_shared<FoodPredicate>(foodStimulusList[0]->GetPosition(), foodStimulusList[0]->GetAmount());
+	return std::make_shared<FoodPredicate>(
+		FOOD_PREDICATE_ID,
+		foodStimulusList[0]->GetPosition(),
+		foodStimulusList[0]->GetAmount(),
+		foodStimulusList[0]->GetActor());
 }
 
 void EatGoal::AddActions()

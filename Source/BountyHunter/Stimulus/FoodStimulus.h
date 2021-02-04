@@ -3,11 +3,12 @@
 
 #include "VisionStimulus.h"
 
+
 class FoodStimulus : public VisionStimulus
 {
 public:
-	FoodStimulus(const glm::vec3& position, unsigned int amount) :
-		VisionStimulus(position), mAmount { amount } {}
+	FoodStimulus(const glm::vec3& position, unsigned int amount, AActor* actor) :
+		VisionStimulus(position, actor), mAmount { amount } {}
 	virtual ~FoodStimulus() = default;
 
 	std::string GetClassName() const override { return typeid(FoodStimulus).name(); }

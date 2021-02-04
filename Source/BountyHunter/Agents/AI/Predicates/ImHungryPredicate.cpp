@@ -1,7 +1,7 @@
 ﻿#include "ImHungryPredicate.h"
 #include "Predicates.h"
 
-ImHungryPredicate::ImHungryPredicate() : BasePredicate(IM_HUNGRY_PREDICATE_NAME)
+ImHungryPredicate::ImHungryPredicate(int id) : BasePredicate(id, IM_HUNGRY_PREDICATE_NAME)
 {
 }
 
