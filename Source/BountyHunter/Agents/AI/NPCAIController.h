@@ -7,14 +7,17 @@
 #include <memory>
 #include <BountyHunter/Agents/AI/IAgentAIController.h>
 #include <BountyHunter/Agents/Navigation/NavigationPlanner.h>
+#include <BountyHunter/Agents/NPCTypes.h>
 
-#include "BountyHunter/Agents/NPCTypes.h"
-#include "goap/IPredicate.h"
-
+#include <goap/IPredicate.h>
+#include <goap/sensory/IStimulus.h>
+#include <goap/sensory/SensorySystem.h>
 
 #include "NPCAIController.generated.h"
 
-namespace NAI { namespace Goap { class IAgent; } }
+namespace NAI { namespace Goap {
+	class BaseSensor;
+	class IAgent; } }
 
 UCLASS()
 class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIController
@@ -38,12 +41,14 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 		virtual FString GetAgentCurrentState_Implementation() const;
 
 		void AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
+		void SubscribeSensor(std::shared_ptr<NAI::Goap::BaseSensor> sensor) const;
 
-	private:
+private:
 		void CreateAgent(NPCTypes type);
 		void CreateNavigationPlanner();
 
 		std::shared_ptr<NAI::Goap::IAgent> mAgent;
+		std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> mSensorySystem;
 		std::shared_ptr<NAI::Navigation::INavigationPlanner> mNavigationPlanner;
 		FVector mLastPoint { FVector::ZeroVector} ;
 };

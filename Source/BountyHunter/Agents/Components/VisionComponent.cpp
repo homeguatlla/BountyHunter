@@ -1,20 +1,29 @@
 ﻿#include "VisionComponent.h"
 
-
 #include "DrawDebugHelpers.h"
 #include "InteractableComponent.h"
-#include "BountyHunter/utils/UtilsLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "BountyHunter/CustomTypes.h"
-#include "BountyHunter/Agents/AI/NPCAIController.h"
 #include "Engine/Engine.h"
 #include "GameFramework/Character.h"
+
+#include <BountyHunter/utils/UtilsLibrary.h>
+#include <BountyHunter/CustomTypes.h>
+#include <BountyHunter/Agents/AI/NPCAIController.h>
+
+#include <goap/sensory/BaseSensor.h>
 
 using namespace utils;
 
 UVisionComponent::UVisionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+	mSensor = std::make_shared<NAI::Goap::BaseSensor>();
+}
+
+void UVisionComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	GetNPCAIController()->SubscribeSensor(mSensor);
 }
 
 void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -41,8 +50,10 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			const auto interactableComponent = hit.Actor->FindComponentByClass<UInteractableComponent>();
 			if(interactableComponent != nullptr)
 			{
-				auto stimulus = interactableComponent->CreateStimulus();
-				
+				const auto stimulus = interactableComponent->CreateStimulus();
+				mSensor->NotifyAll(stimulus);
+				UE_LOG(LogTemp, Log, TEXT("[UVisionComponent::TickComponent] Food detected"));
+	
 				if(IsDebug)
 				{
 					auto name = hit.Actor->GetName();
@@ -62,7 +73,7 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ver como se transforma en estímulo
 }
 
-void UVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation, const FVector& forward)
+void UVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation, const FVector& forward) const
 {
 	DrawDebugSphere(GetWorld(), head, 10.0f, 20.0f, FColor::Black);
 	DrawDebugSphere(GetWorld(), pointOfSight, 5.0f, 20.0f, FColor::Blue);

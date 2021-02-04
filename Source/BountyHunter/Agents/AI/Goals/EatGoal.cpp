@@ -60,7 +60,7 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
             {
                 return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
             });
-
+	
 	return std::make_shared<FoodPredicate>(foodStimulusList[0]->GetPosition(), foodStimulusList[0]->GetAmount());
 }
 

@@ -12,7 +12,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UVisionComponent : public UNPCAgentComponent//, public NAI::Goap::BaseSensor
+class BOUNTYHUNTER_API UVisionComponent : public UNPCAgentComponent
 {
 	GENERATED_BODY()
 
@@ -31,10 +31,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
 	bool IsDebug;
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	void BeginPlay() override;
+	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	void DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation,
-	                    const FVector& forward);
+	                    const FVector& forward) const;
+
+	std::shared_ptr<NAI::Goap::BaseSensor> mSensor;
 };

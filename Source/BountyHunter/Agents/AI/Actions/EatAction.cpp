@@ -1,5 +1,7 @@
 ﻿#include "EatAction.h"
 
+
+#include "IDetailTreeNode.h"
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
 #include "BountyHunter/Agents/Components/EatComponent.h"
@@ -21,9 +23,11 @@ void EatAction::DoProcess(float elapsedTime)
 		const auto predicateMatch = GetPredicateMatchedPreconditionWithText(FOOD_PREDICATE_NAME);
 		const auto foodPredicate = std::static_pointer_cast<FoodPredicate>(predicateMatch);
 		mEatComponent->Eat(foodPredicate->GetAmount());
+		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] HasHungry"));
 	}
 	else if(!mEatComponent->IsEating())
 	{
 		mHasAccomplished = true;
+		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Not eating -> accomplished"));
 	}
 }

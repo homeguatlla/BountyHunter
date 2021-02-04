@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <typeinfo>
+
 #include "VisionStimulus.h"
 
 class FoodStimulus : public VisionStimulus
@@ -8,7 +10,7 @@ public:
 		VisionStimulus(position), mAmount { amount } {}
 	virtual ~FoodStimulus() = default;
 
-	std::string GetClassName() const override { return "FoodStimulus"; }
+	std::string GetClassName() const override { return typeid(FoodStimulus).name(); }
 	unsigned int GetAmount() const { return mAmount; }
 
 private:

@@ -2,22 +2,21 @@
 
 #include <concrt.h>
 #include <NAI/include/goap/IGoapPlanner.h>
-#include <NAI/include/goap/goals/GoToGoal.h>
 #include <NAI/include/goap/predicates/GoToPredicate.h>
-#include <NAI/include/goap/planners/TreeGoapPlanner.h>
+#include <NAI/include/goap/sensory/BaseSensor.h>
 
 #include <BountyHunter/BountyHunterGameMode.h>
 #include <BountyHunter/Agents/NPCAgentBuilder.h>
+#include <BountyHunter/Agents/NPCAgentFactory.h>
+#include <BountyHunter/Agents/NPCCharacter.h>
 #include <BountyHunter/Agents/AI/NPCAgent.h>
 #include <BountyHunter/utils/UtilsLibrary.h>
 
-
-
-#include "BountyHunter/Agents/NPCAgentFactory.h"
-#include "BountyHunter/Agents/NPCCharacter.h"
 #include "GameFramework/Character.h"
 #include "Runtime/AIModule/Classes/Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/World.h"
+#include "goap/sensory/IStimulus.h"
+#include "goap/sensory/SensorySystem.h"
 
 
 void ANPCAIController::BeginPlay()
@@ -82,8 +81,15 @@ FString ANPCAIController::GetAgentCurrentState_Implementation() const
 void ANPCAIController::AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
 {
 	assert(mAgent != nullptr);
+
+	UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::AddNewPredicate] %s"), *utils::UtilsLibrary::ConvertToFString(predicate->GetText()));
 	
 	mAgent->OnNewPredicate(predicate);
+}
+
+void ANPCAIController::SubscribeSensor(std::shared_ptr<NAI::Goap::BaseSensor> sensor) const
+{
+	sensor->Subscribe(mSensorySystem);
 }
 
 void ANPCAIController::CreateNavigationPlanner()
@@ -102,7 +108,8 @@ void ANPCAIController::CreateAgent(NPCTypes type)
 		{
 			const auto eventDispatcher = gameMode->GetEventDispatcher();
 			NPCAgentFactory factory(eventDispatcher, mNavigationPlanner);
-			mAgent = factory.CreateAgent(type, this);
+			mSensorySystem = std::make_shared<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>>();
+			mAgent = factory.CreateAgent(type, this, mSensorySystem);
 
 			mAgent->StartUp();
 		}
