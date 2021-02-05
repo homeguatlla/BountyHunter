@@ -73,23 +73,25 @@ void NavigationPlanner::OnPathFound(uint32 aPathId, ENavigationQueryResult::Type
 	mPathFromToCallback(navigationPath);
 }
 
-glm::vec3 NavigationPlanner::GetLocationGivenAName(const std::string& locationName) const
+bool NavigationPlanner::FillWithLocationGivenAName(const std::string& locationName, glm::vec3& location) const
 {
 	auto it = std::find_if(mLocations.begin(), mLocations.end(), 
-		[&locationName](const Location& location){
-			return location.name == locationName;
-		});
+        [&locationName](const Location& location){
+            return location.name == locationName;
+        });
 
 	if (it != mLocations.end())
 	{
 		FVector point = it->wayPoint->GetActorLocation();
-		return glm::vec3(point.X, point.Y, point.Z);
+		location = glm::vec3(point.X, point.Y, point.Z);
+		return true;
 	}
 	else
 	{	
 		std::stringstream msg;
 		msg << "Location <" << locationName << "> not found!";
-		throw std::logic_error(msg.str());
+		//throw std::logic_error(msg.str());
+		return false;
 	}
 }
 

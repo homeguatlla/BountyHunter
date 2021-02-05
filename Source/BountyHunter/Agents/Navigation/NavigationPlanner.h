@@ -5,6 +5,7 @@
 #include <memory>
 #include <map>
 #include <string>
+#include <vector>
 #include "AI/Navigation/NavigationTypes.h"
 
 namespace NAI {
@@ -16,6 +17,7 @@ namespace NAI {
 
 class NavigationPlanner : public NAI::Navigation::INavigationPlanner
 {
+private:
 	struct Location
 	{
 		std::string name;
@@ -30,7 +32,7 @@ public:
 	~NavigationPlanner() = default;
 
 	void GetPathFromTo(const glm::vec3& origin, const glm::vec3& destination, PathFromToCallback callback) override;
-	glm::vec3 GetLocationGivenAName(const std::string& locationName) const override;
+	bool FillWithLocationGivenAName(const std::string& locationName, glm::vec3& location) const override;	
 	unsigned int GetAproxCost(const glm::vec3& origin, const glm::vec3& destination) const override;
 	
 private:

@@ -2,17 +2,18 @@
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
 #include "BountyHunter/Agents/AI/Actions/EatAction.h"
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
-#include "BountyHunter/Agents/AI/Predicates/ImHungryPredicate.h"
 #include "BountyHunter/Stimulus/FoodStimulus.h"
+#include "goap/IPredicate.h"
 
 #include <goap/GoapUtils.h>
 #include <goap/IAction.h>
 #include <goap/sensory/IStimulus.h>
 #include <algorithm>
 
+#include "goap/predicates/GoToPredicate.h"
 
-#include "goap/IPredicate.h"
-#include "goap/PredicatesHandler.h"
+
+const float DISTANCE_TO_EAT = 10.0f;
 
 EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
 {
@@ -41,7 +42,7 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
 	std::vector<std::shared_ptr<FoodStimulus>> foodStimulusList;
 
 	memory.PerformActionForEach(
-		[&foodStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
+		[this, &foodStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
 		{
 			if(stimulus->GetClassName() == typeid(FoodStimulus).name())
 			{
@@ -63,12 +64,19 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
             {
                 return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
             });
-	
-	return std::make_shared<FoodPredicate>(
-		FOOD_PREDICATE_ID,
-		foodStimulusList[0]->GetPosition(),
-		foodStimulusList[0]->GetAmount(),
-		foodStimulusList[0]->GetActor());
+
+	if(glm::distance(foodStimulusList[0]->GetPosition(), mAgent->GetPosition()) < DISTANCE_TO_EAT)
+	{
+		return std::make_shared<FoodPredicate>(
+	        FOOD_PREDICATE_ID,
+	        foodStimulusList[0]->GetPosition(),
+	        foodStimulusList[0]->GetAmount(),
+	        foodStimulusList[0]->GetActor());
+	}
+	else
+	{
+		return std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, "GoTo", foodStimulusList[0]->GetPosition());
+	}	
 }
 
 void EatGoal::AddActions()
