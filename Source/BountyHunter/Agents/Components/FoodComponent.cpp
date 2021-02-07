@@ -13,5 +13,6 @@ UFoodComponent::UFoodComponent()
 std::shared_ptr<NAI::Goap::IStimulus> UFoodComponent::CreateStimulus() const
 {
 	const auto location = GetOwner()->GetActorLocation();
-	return std::make_shared<FoodStimulus>(utils::UtilsLibrary::ConvertToVec3(location), Amount, GetOwner());
+	const int id = GetOwner()->GetUniqueID();
+	return std::make_shared<FoodStimulus>(id, utils::UtilsLibrary::ConvertToVec3(location), Amount, GetOwner());
 }

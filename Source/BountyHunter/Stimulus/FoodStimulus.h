@@ -7,8 +7,8 @@
 class FoodStimulus : public VisionStimulus
 {
 public:
-	FoodStimulus(const glm::vec3& position, unsigned int amount, AActor* actor) :
-		VisionStimulus(position, actor), mAmount { amount } {}
+	FoodStimulus(int id, const glm::vec3& position, unsigned int amount, AActor* actor) :
+		VisionStimulus(id, position, actor), mAmount { amount } {}
 	virtual ~FoodStimulus() = default;
 
 	std::string GetClassName() const override { return typeid(FoodStimulus).name(); }

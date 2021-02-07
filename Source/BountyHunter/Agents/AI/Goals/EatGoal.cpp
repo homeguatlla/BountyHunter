@@ -13,7 +13,7 @@
 #include "goap/predicates/GoToPredicate.h"
 
 
-const float DISTANCE_TO_EAT = 10.0f;
+const float DISTANCE_TO_EAT = 100.0f;
 
 EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
 {
@@ -65,7 +65,11 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
                 return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
             });
 
-	if(glm::distance(foodStimulusList[0]->GetPosition(), mAgent->GetPosition()) < DISTANCE_TO_EAT)
+	const auto distance = glm::distance(foodStimulusList[0]->GetPosition(), mAgent->GetPosition());
+
+	UE_LOG(LogTemp, Log, TEXT("[EatGoal::DoTransformStimulusIntoPredicates] Stimulus id = %d distance = %f"), foodStimulusList[0]->GetId(), distance);
+						
+	if(distance < DISTANCE_TO_EAT)
 	{
 		return std::make_shared<FoodPredicate>(
 	        FOOD_PREDICATE_ID,

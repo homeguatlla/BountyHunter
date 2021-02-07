@@ -1,9 +1,7 @@
 ﻿#include "VisionStimulus.h"
 
-int VisionStimulus::IDCounter = 0;
-
-VisionStimulus::VisionStimulus(const glm::vec3& position, AActor* actor)  :
-mId{IDCounter++},
+VisionStimulus::VisionStimulus(int id, const glm::vec3& position, AActor* actor)  :
+mId{id},
 mPosition{position},
 mActor{actor}
 {

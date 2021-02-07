@@ -7,10 +7,8 @@ class AActor;
 
 class VisionStimulus : public NAI::Goap::IStimulus
 {
-	static int IDCounter;
-
 public:
-	VisionStimulus(const glm::vec3& position, AActor* actor);
+	VisionStimulus(int id, const glm::vec3& position, AActor* actor);
 
 	virtual ~VisionStimulus() = default;
 
