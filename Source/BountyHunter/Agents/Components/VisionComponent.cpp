@@ -2,7 +2,6 @@
 
 #include "DrawDebugHelpers.h"
 #include "InteractableComponent.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Engine/Engine.h"
 #include "GameFramework/Character.h"
 
@@ -52,7 +51,7 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				const auto stimulus = interactableComponent->CreateStimulus();
 				mSensor->NotifyAll(stimulus);
-				UE_LOG(LogTemp, Log, TEXT("[UVisionComponent::TickComponent] Food detected"));
+				//UE_LOG(LogTemp, Log, TEXT("[UVisionComponent::TickComponent] Food detected"));
 	
 				if(IsDebug)
 				{

@@ -1,9 +1,7 @@
 ﻿
 #include "EatComponent.h"
-#include "BountyHunter/Agents/AI/IAgentAIController.h"
 #include "BountyHunter/Agents/AI/NPCAIController.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
-#include "GameFramework/Actor.h"
 #include "goap/BasePredicate.h"
 
 
@@ -50,25 +48,25 @@ void UEatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UEatComponent::UpdateEating(float elapsedTime)
 {
 	mEatingTime -= elapsedTime;
-	UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating... %f"), mEatingTime);
+	//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating... %f"), mEatingTime);
 	if(mEatingTime <= 0.0f)
 	{
 		mAmount--;
 		AccumulatedTimeToStartHavingHungry += TimeWithoutHungryPerAmountEaten;
 		mEatingTime = mAmount <= 0 ? mEatingTime = 0.0f : mEatingTime = EatingSpeed;
-		UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating amount %f, %f"), AccumulatedTimeToStartHavingHungry, mEatingTime);
+		//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating amount %f, %f"), AccumulatedTimeToStartHavingHungry, mEatingTime);
 	}
 }
 
 void UEatComponent::UpdateHungry(float elapsedTime)
 {
 	AccumulatedTimeToStartHavingHungry -= elapsedTime;
-	UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateHungry] making hungry...%f"), AccumulatedTimeToStartHavingHungry);
+	//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateHungry] making hungry...%f"), AccumulatedTimeToStartHavingHungry);
 		
 	if(AccumulatedTimeToStartHavingHungry <= 0.0f)
 	{
 		AddHungryPredicateToAgent();
-		UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateHungry] adding Hungry predicate"));
+		//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateHungry] adding Hungry predicate"));
 	}
 }
 

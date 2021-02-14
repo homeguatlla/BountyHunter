@@ -22,10 +22,10 @@ EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
 void EatGoal::DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent)
 {
 	mAgent = agent;
-	Reset();
+	AddActions();
 }
 
-void EatGoal::DoReset()
+void EatGoal::DoReset(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
 	AddActions();
 }
@@ -67,7 +67,7 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
 
 	const auto distance = glm::distance(foodStimulusList[0]->GetPosition(), mAgent->GetPosition());
 
-	UE_LOG(LogTemp, Log, TEXT("[EatGoal::DoTransformStimulusIntoPredicates] Stimulus id = %d distance = %f"), foodStimulusList[0]->GetId(), distance);
+	//UE_LOG(LogTemp, Log, TEXT("[EatGoal::DoTransformStimulusIntoPredicates] Stimulus id = %d distance = %f"), foodStimulusList[0]->GetId(), distance);
 						
 	if(distance < DISTANCE_TO_EAT)
 	{

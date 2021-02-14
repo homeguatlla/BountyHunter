@@ -82,7 +82,7 @@ bool NavigationPlanner::FillWithLocationGivenAName(const std::string& locationNa
 
 	if (it != mLocations.end())
 	{
-		FVector point = it->wayPoint->GetActorLocation();
+		const auto point = it->wayPoint->GetActorLocation();
 		location = glm::vec3(point.X, point.Y, point.Z);
 		return true;
 	}
