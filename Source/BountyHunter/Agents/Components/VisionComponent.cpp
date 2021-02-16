@@ -23,6 +23,7 @@ void UVisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	GetNPCAIController()->SubscribeSensor(mSensor);
+	SaveActorHeadLocation();
 }
 
 void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -70,6 +71,12 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 	//TODO
 	// ver como se transforma en estímulo
+}
+
+void UVisionComponent::SaveActorHeadLocation()
+{
+	const auto skeletalMeshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
+	mActorHeadLocation = skeletalMeshComponent->GetBoneLocation(HeadBoneName);
 }
 
 void UVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation, const FVector& forward) const

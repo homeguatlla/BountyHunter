@@ -1,10 +1,8 @@
 ﻿
 #include "NPCAgentComponent.h"
 
-#include "BountyHunter/Agents/AgentsConstants.h"
 #include "BountyHunter/Agents/AI/IAgentAIController.h"
 #include "BountyHunter/Agents/AI/NPCAIController.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Actor.h"
 
 UNPCAgentComponent::UNPCAgentComponent()
@@ -15,7 +13,6 @@ UNPCAgentComponent::UNPCAgentComponent()
 void UNPCAgentComponent::BeginPlay()
 {
 	SaveNPCAIController();
-	SaveActorHeadLocation();
 }
 
 void UNPCAgentComponent::SaveNPCAIController()
@@ -27,13 +24,6 @@ void UNPCAgentComponent::SaveNPCAIController()
 	checkf(controller != nullptr, TEXT("[UNPCAgentComponent::SaveNPCAIController] AIAgentController is null"));
 
 	mNPCAIController = Cast<ANPCAIController>(controller);
-}
-
-
-void UNPCAgentComponent::SaveActorHeadLocation()
-{
-	const auto skeletalMeshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
-	mActorHeadLocation = skeletalMeshComponent->GetBoneLocation(AGENT_HEAD_BONE_NAME);
 }
 
 
