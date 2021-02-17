@@ -16,8 +16,12 @@ public:
 	// Sets default values for this component's properties
 	UEatComponent();
 
+	UFUNCTION(BlueprintCallable, Category = "Eat Attributes")
 	bool HasHungry() const { return !IsEating() && AccumulatedTimeToStartHavingHungry <= MinAccumulatedTimeToBeFull; }
+
+	UFUNCTION(BlueprintCallable, Category = "Eat Attributes")
 	bool IsEating() const { return mEatingTime > 0.0f; }
+	
 	void Eat(unsigned int amount);
 	
 	/** Time spends to eat one amount of food, in seconds */
