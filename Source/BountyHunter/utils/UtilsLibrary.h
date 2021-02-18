@@ -107,5 +107,44 @@ class UtilsLibrary
 
 			return outHits;
 		}
+
+
+	static FQuat LookAt(const FVector& sourcePoint, const FVector& destPoint)
+		{
+			FVector forwardVector = destPoint - sourcePoint;
+			forwardVector.Normalize();
+
+			float dot = FVector::DotProduct(FVector::ForwardVector, forwardVector);
+
+			//two opposite vectors, angle = 180 we proceed with UpVector and angle 180
+			if (FMath::IsNearlyZero(FGenericPlatformMath::Abs(dot - (-1.0f))))
+			{
+				return FQuat(FVector::UpVector.X, FVector::UpVector.Y, FVector::UpVector.Z, PI);
+			}
+			//two coincident vectors, angle = 0, we proceed with identity
+			else if (FMath::IsNearlyZero(FGenericPlatformMath::Abs(dot - (1.0f))))
+			{
+				return FQuat::Identity;
+			}
+			else
+			{
+				float rotAngle = (float)FGenericPlatformMath::Acos(dot);
+				FVector rotAxis = FVector::CrossProduct(FVector::ForwardVector, forwardVector);
+				rotAxis.Normalize();
+				return CreateQuatFromAxisAngle(rotAxis, rotAngle);
+			}
+		}
+
+	static FQuat CreateQuatFromAxisAngle(const FVector& axis, float angle)
+		{
+			float halfAngle = angle * .5f;
+			float s = (float)FGenericPlatformMath::Sin(halfAngle);
+			FQuat q;
+			q.X = axis.X * s;
+			q.Y = axis.Y * s;
+			q.Z = axis.Z * s;
+			q.W = (float)FGenericPlatformMath::Cos(halfAngle);
+			return q;
+		}
 };
 }

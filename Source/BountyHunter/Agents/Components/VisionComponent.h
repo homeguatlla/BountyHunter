@@ -27,9 +27,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
 	int LengthOfView;
 
-	/** Time spends to eat one amount of food, in seconds */
+	/** Head Position */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
 	FName HeadBoneName;
+
+	/** Next or previous bone to Head to calculate the view direction */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
+	FName OtherHeadBoneName;
 	
 	/** If true, draw debug lines */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
@@ -41,10 +45,11 @@ public:
 
 private:
 	FVector GetActorHeadLocation() const { return mActorHeadLocation; }
-	void SaveActorHeadLocation();
-	void DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FRotator& rotation,
-	                    const FVector& forward) const;
+	void UpdateActorHeadLocationAndRotation();
+	void DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FVector& forward) const;
 
 	std::shared_ptr<NAI::Goap::BaseSensor> mSensor;
 	FVector mActorHeadLocation;
+	//FRotator mActorHeadRotator;
+	FVector mActorHeadDirection;
 };
