@@ -99,6 +99,11 @@ void ANPCAIController::SubscribeSensor(std::shared_ptr<NAI::Goap::BaseSensor> se
 	sensor->Subscribe(mSensorySystem);
 }
 
+void ANPCAIController::AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal)
+{
+	mAgent->AddNewGoal(goal);
+}
+
 void ANPCAIController::CreateNavigationPlanner()
 {
 	mNavigationPlanner = std::make_shared<NavigationPlanner>(GetWorld());

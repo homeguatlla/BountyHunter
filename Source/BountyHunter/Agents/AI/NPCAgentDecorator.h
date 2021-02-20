@@ -4,7 +4,6 @@
 class NPCAgentDecorator : public NAI::Goap::IAgent
 {
 public:
-
 	NPCAgentDecorator(std::shared_ptr<NAI::Goap::IAgent> agent);
 	~NPCAgentDecorator() = default;
 
@@ -24,6 +23,7 @@ public:
 		std::shared_ptr<NAI::Goap::IThreshold> threshold) override;
 	std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> GetSensoryThresholds() const override;
 	void RemovePredicate(int id) override;
+	void AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal) override;
 
 	bool IsEnabled() const { return mIsEnabled; }
 	void SetEnabled(bool enabled) { mIsEnabled = enabled; }

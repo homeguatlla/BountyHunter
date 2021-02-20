@@ -1,6 +1,7 @@
 ﻿
 #include "EatComponent.h"
 #include "BountyHunter/Agents/AI/NPCAIController.h"
+#include "BountyHunter/Agents/AI/Goals/EatGoal.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
 #include "goap/BasePredicate.h"
 
@@ -26,7 +27,10 @@ void UEatComponent::Eat(uint8 amount)
 // Called when the game starts
 void UEatComponent::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
+
+	auto controller = GetNPCAIController();
+	controller->AddNewGoal(std::make_shared<EatGoal>(this));
 }
 
 // Called every frame

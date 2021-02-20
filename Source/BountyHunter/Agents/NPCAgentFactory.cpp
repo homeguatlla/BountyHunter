@@ -61,16 +61,10 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 {
 	NPCAgentBuilder builder;
 
-	const auto character = controller->GetCharacter();
-	auto eatComponent = character->FindComponentByClass<UEatComponent>();
-	//auto eatInterface = TScriptInterface<IIEatComponent>(eatComponent);
-	
-	check(eatComponent != nullptr && eatComponent->GetClass()->ImplementsInterface(UIEatComponent::StaticClass()));
 	auto acceptanceRadius = 100.0f;
 	return	builder.WithController(controller)
 					.WithEventDispatcher(mEventDispatcher)
 					.WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
-					.WithGoal(std::make_shared<EatGoal>(eatComponent))
 					.WithGoal(std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius))
 					.WithPerceptionSystem(sensorySystem)
 					.WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())

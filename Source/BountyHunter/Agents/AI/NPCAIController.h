@@ -13,6 +13,9 @@
 #include <goap/sensory/IStimulus.h>
 #include <goap/sensory/SensorySystem.h>
 
+#include "goap/IGoal.h"
+
+
 #include "NPCAIController.generated.h"
 
 namespace NAI { namespace Goap {
@@ -42,6 +45,7 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 
 		void AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
 		void SubscribeSensor(std::shared_ptr<NAI::Goap::BaseSensor> sensor) const;
+		void AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal);
 
 private:
 		void CreateAgent(NPCTypes type);

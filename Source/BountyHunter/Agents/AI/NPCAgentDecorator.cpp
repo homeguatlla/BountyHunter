@@ -83,3 +83,8 @@ void NPCAgentDecorator::RemovePredicate(int id)
 {
 	mAgent->RemovePredicate(id);
 }
+
+void NPCAgentDecorator::AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal)
+{
+	mAgent->AddNewGoal(goal);
+}
