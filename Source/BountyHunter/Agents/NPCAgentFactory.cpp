@@ -63,7 +63,9 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 
 	const auto character = controller->GetCharacter();
 	auto eatComponent = character->FindComponentByClass<UEatComponent>();
-	assert(eatComponent != nullptr);
+	//auto eatInterface = TScriptInterface<IIEatComponent>(eatComponent);
+	
+	check(eatComponent != nullptr && eatComponent->GetClass()->ImplementsInterface(UIEatComponent::StaticClass()));
 	auto acceptanceRadius = 100.0f;
 	return	builder.WithController(controller)
 					.WithEventDispatcher(mEventDispatcher)

@@ -12,6 +12,7 @@ UNPCAgentComponent::UNPCAgentComponent()
 
 void UNPCAgentComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	SaveNPCAIController();
 }
 
