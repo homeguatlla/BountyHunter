@@ -4,18 +4,17 @@
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
 #include "BountyHunter/Stimulus/FoodStimulus.h"
 #include "goap/IPredicate.h"
+#include "goap/predicates/GoToPredicate.h"
 
 #include <goap/GoapUtils.h>
 #include <goap/IAction.h>
 #include <goap/sensory/IStimulus.h>
 #include <algorithm>
 
-#include "goap/predicates/GoToPredicate.h"
 
+const float DISTANCE_TO_EAT = 100.0f; //Esto podría estar en el componente
 
-const float DISTANCE_TO_EAT = 100.0f;
-
-EatGoal::EatGoal(UEatComponent* eatComponent) : mEatComponent { eatComponent }
+EatGoal::EatGoal(IIEatComponent* eatComponent) : mEatComponent { eatComponent }
 {
 }
 

@@ -1,16 +1,13 @@
 ﻿#include "EatAction.h"
-
-
-#include "IDetailTreeNode.h"
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
-#include "BountyHunter/Agents/Components/EatComponent.h"
+#include "BountyHunter/Agents/Components/IEatComponent.h"
 #include "GameFramework/Actor.h"
 
 EatAction::EatAction(const std::vector<std::string>& preConditions,
                      const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& postConditions,
                      unsigned int cost,
-                     UEatComponent* eatComponent) :
+                     IIEatComponent* eatComponent) :
 BaseAction(preConditions, postConditions, cost),
 mEatComponent{eatComponent}
 {

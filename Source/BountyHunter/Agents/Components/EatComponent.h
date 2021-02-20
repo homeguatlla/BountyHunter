@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "IEatComponent.h"
 #include "BountyHunter/Agents/Components/NPCAgentComponent.h"
 #include "EatComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UEatComponent : public UNPCAgentComponent
+class BOUNTYHUNTER_API UEatComponent : public UNPCAgentComponent, public IIEatComponent
 {
 	GENERATED_BODY()
 
@@ -16,13 +18,9 @@ public:
 	// Sets default values for this component's properties
 	UEatComponent();
 
-	UFUNCTION(BlueprintCallable, Category = "Eat Attributes")
-	bool HasHungry() const { return !IsEating() && AccumulatedTimeToStartHavingHungry <= MinAccumulatedTimeToBeFull; }
-
-	UFUNCTION(BlueprintCallable, Category = "Eat Attributes")
-	bool IsEating() const { return mEatingTime > 0.0f; }
-	
-	void Eat(unsigned int amount);
+	bool HasHungry() const override { return !IsEating() && AccumulatedTimeToStartHavingHungry <= MinAccumulatedTimeToBeFull; }
+	bool IsEating() const override { return mEatingTime > 0.0f; }	
+	void Eat(uint8 amount) override;
 	
 	/** Time spends to eat one amount of food, in seconds */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")

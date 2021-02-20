@@ -3,12 +3,12 @@
 
 #include "goap/agent/IAgent.h"
 
-class UEatComponent;
+class IIEatComponent;
 
 class EatGoal : public NAI::Goap::BaseGoal
 {	
 public:
-	EatGoal(UEatComponent* eatComponent);
+	EatGoal(IIEatComponent* eatComponent);
 	virtual ~EatGoal() = default;
 
 protected:
@@ -24,5 +24,5 @@ protected:
 private:
 
 	std::shared_ptr<NAI::Goap::IAgent> mAgent;
-	UEatComponent* mEatComponent;
+	IIEatComponent* mEatComponent;
 };

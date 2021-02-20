@@ -14,7 +14,7 @@ mEatingTime{0.0f}
 	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
-void UEatComponent::Eat(unsigned int amount)
+void UEatComponent::Eat(uint8 amount)
 {
 	check(amount > 0);
 	
@@ -28,7 +28,6 @@ void UEatComponent::BeginPlay()
 {
 	Super::BeginPlay();	
 }
-
 
 // Called every frame
 void UEatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
