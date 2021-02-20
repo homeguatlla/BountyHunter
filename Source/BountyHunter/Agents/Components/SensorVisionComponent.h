@@ -8,20 +8,24 @@
 #include "Components/ActorComponent.h"
 #include <goap/sensory/BaseSensor.h>
 
-#include "VisionComponent.generated.h"
+#include "SensorVisionComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UVisionComponent : public UNPCAgentComponent
+class BOUNTYHUNTER_API USensorVisionComponent : public UNPCAgentComponent
 {
 	GENERATED_BODY()
 
 public:
-	UVisionComponent();
+	USensorVisionComponent();
 
 	/** Radius of the sphere volume to propagate from head to length of view */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
 	float Radius;
+	
+	/** Head distance in the direction of view to put the eyes. Where view volume start. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
+	float HeadDistance;
 	
 	/** Length of view */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vision Attributes")
@@ -50,6 +54,5 @@ private:
 
 	std::shared_ptr<NAI::Goap::BaseSensor> mSensor;
 	FVector mActorHeadLocation;
-	//FRotator mActorHeadRotator;
 	FVector mActorHeadDirection;
 };

@@ -1,4 +1,4 @@
-﻿#include "VisionComponent.h"
+﻿#include "SensorVisionComponent.h"
 
 #include "DrawDebugHelpers.h"
 #include "InteractableComponent.h"
@@ -13,19 +13,19 @@
 
 using namespace utils;
 
-UVisionComponent::UVisionComponent()
+USensorVisionComponent::USensorVisionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	mSensor = std::make_shared<NAI::Goap::BaseSensor>();
 }
 
-void UVisionComponent::BeginPlay()
+void USensorVisionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	GetNPCAIController()->SubscribeSensor(mSensor);
 }
 
-void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+void USensorVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -33,14 +33,21 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	UpdateActorHeadLocationAndRotation();
 	
 	const auto forward = GetOwner()->GetActorForwardVector();
-	const auto head = GetActorHeadLocation() + mActorHeadDirection * 5;
+	const auto head = GetActorHeadLocation() + mActorHeadDirection * HeadDistance;
 	const auto pointOfSight = head + LengthOfView * mActorHeadDirection;
 
 	const auto channel = ECollisionChannel::ECC_VIEWABLE;
 	FCollisionQueryParams params;
 	params.AddIgnoredActor(GetOwner());
 	
-	auto hitResults = UtilsLibrary::TraceVisionSphere(GetWorld(), head, pointOfSight, Radius, FQuat::Identity, channel, params);
+	auto hitResults = UtilsLibrary::TraceVisionSphere(
+		GetWorld(),
+		head,
+		pointOfSight,
+		Radius,
+		FQuat::Identity,
+		channel,
+		params);
 
 	// loop through TArray
 	for (auto&& hit : hitResults)
@@ -73,7 +80,7 @@ void UVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ver como se transforma en estímulo
 }
 
-void UVisionComponent::UpdateActorHeadLocationAndRotation()
+void USensorVisionComponent::UpdateActorHeadLocationAndRotation()
 {
 	const auto skeletalMeshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
 	mActorHeadLocation = skeletalMeshComponent->GetBoneLocation(HeadBoneName);
@@ -82,7 +89,7 @@ void UVisionComponent::UpdateActorHeadLocationAndRotation()
 	mActorHeadDirection = head2 - mActorHeadLocation;
 }
 
-void UVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FVector& forward) const
+void USensorVisionComponent::DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FVector& forward) const
 {
 	DrawDebugSphere(GetWorld(), head, 10.0f, 20.0f, FColor::Black, false, 0.2f);
 	DrawDebugSphere(GetWorld(), pointOfSight, 5.0f, 20.0f, FColor::Blue, false, 0.2f);
