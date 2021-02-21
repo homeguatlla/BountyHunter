@@ -12,7 +12,7 @@ namespace TLN
 
 	void Debug::OnEnter(float deltaTime)
 	{
-		auto debugData = GetContext()->GetDebugData();
+		const auto debugData = GetContext()->GetDebugData();
 		mEventDispatcher->OnNextNPC.Broadcast(debugData->GetCurrentNPCController());
 		mEventDispatcher->OnEnableDebugMode.Broadcast(true);
 	}

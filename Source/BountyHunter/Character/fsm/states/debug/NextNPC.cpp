@@ -20,7 +20,7 @@ namespace TLN
 		auto it = std::find(controllers.begin(), controllers.end(), debugData->GetCurrentNPCController());
 		if (it != controllers.end())
 		{
-			it++;
+			++it;
 			if (it == controllers.end())
 			{
 				it = controllers.begin();

@@ -56,6 +56,8 @@
 
 #include <cassert>
 
+#include "FSM/StatesMachineFactory.h"
+
 using namespace TLN;
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -301,82 +303,23 @@ void ABountyHunterCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 
 void ABountyHunterCharacter::CreateMovementStatesMachine()
 {
-	auto statesMachine = std::make_unique<StatesMachine>(mCharacterFSMContext);
-
-	auto idle = std::make_shared<Idle>();
-	auto walk = std::make_shared<Walk>();
-
-	statesMachine->AddState(idle);
-	statesMachine->AddState(walk);
-
-	//from Idle
-	statesMachine->AddTransition(std::make_unique<EnterWalk>(idle, walk));
-
-	//from Walk
-	statesMachine->AddTransition(std::make_unique<EnterIdle>(walk, idle));
-
-	statesMachine->SetInitialState(idle->GetID());
-
-	mStatesMachines.push_back(std::move(statesMachine));
+	StatesMachineFactory factory;
+	
+	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
 }
 
 void ABountyHunterCharacter::CreateAbilityStatesMachine()
 {
-	auto statesMachine = std::make_unique<StatesMachine>(mCharacterFSMContext);
-
-	auto idle = std::make_shared<IdleAbility>();
-	auto cast = std::make_shared<Casting>();
-	auto cooldown = std::make_shared<Cooldown>();
-
-	statesMachine->AddState(idle);
-	statesMachine->AddState(cast);
-	statesMachine->AddState(cooldown);
-
-	//from Idle
-	statesMachine->AddTransition(std::make_unique<EnterCast>(idle, cast));
-
-	//from Cast
-	statesMachine->AddTransition(std::make_unique<EnterCooldown>(cast, cooldown));
-
-	//from Cooldown
-	statesMachine->AddTransition(std::make_unique<EnterIdleAbility>(cooldown, idle));
-
-	statesMachine->SetInitialState(idle->GetID());
-
-	mStatesMachines.push_back(std::move(statesMachine));
+	StatesMachineFactory factory;
+	
+	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
 }
 
 void ABountyHunterCharacter::CreateDebugStatesMachine()
 {
-	auto statesMachine = std::make_unique<StatesMachine>(mCharacterFSMContext);
-
-	auto normal = std::make_shared<Normal>();
-	auto debug = std::make_shared<Debug>();
-	auto nextNPC = std::make_shared<NextNPC>();
-	auto previousNPC = std::make_shared<PreviousNPC>();
-
-	statesMachine->AddState(normal);
-	statesMachine->AddState(debug);
-	statesMachine->AddState(nextNPC);
-	statesMachine->AddState(previousNPC);
-
-	//from Normal
-	statesMachine->AddTransition(std::make_unique<EnterDebug>(normal, debug));
-
-	//from Debug
-	statesMachine->AddTransition(std::make_unique<EnterNormal>(debug, normal));
-	statesMachine->AddTransition(std::make_unique<EnterNextNPC>(debug, nextNPC));
-	statesMachine->AddTransition(std::make_unique<EnterPreviousNPC>(debug, previousNPC));
-
-	//from NextNPC
-	statesMachine->AddTransition(std::make_unique<LeaveState>(nextNPC, debug));
-
-	//from PreviousNPC
-	statesMachine->AddTransition(std::make_unique<LeaveState>(previousNPC, debug));
-
-	statesMachine->SetInitialState(normal->GetID());
-
-	mStatesMachines.push_back(std::move(statesMachine));
+	StatesMachineFactory factory;
+	
+	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::DEBUG, mCharacterFSMContext)));
 }
 
 void ABountyHunterCharacter::CreateStatesMachine()

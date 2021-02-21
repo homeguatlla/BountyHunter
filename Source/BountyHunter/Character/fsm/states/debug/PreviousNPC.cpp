@@ -26,7 +26,7 @@ namespace TLN
 			}
 			else
 			{
-				it--;
+				--it;
 			}
 			debugData->SetCurrentNPCController(*it);
 			mEventDispatcher->OnPreviousNPC.Broadcast(*it);
