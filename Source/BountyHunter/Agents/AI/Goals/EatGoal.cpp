@@ -11,6 +11,8 @@
 #include <goap/sensory/IStimulus.h>
 #include <algorithm>
 
+#include "BountyHunter/Agents/Components/IEatComponent.h"
+
 
 const float DISTANCE_TO_EAT = 100.0f; //Esto podría estar en el componente
 
@@ -38,6 +40,11 @@ void EatGoal::DoAccomplished(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>
 std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicates(
 	const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const
 {
+	if(!mEatComponent->HasHungry())
+	{
+		return nullptr;	
+	}
+	
 	std::vector<std::shared_ptr<FoodStimulus>> foodStimulusList;
 
 	memory.PerformActionForEach(
