@@ -16,7 +16,11 @@
 
 
 #include "AI/Predicates/Predicates.h"
+#include "BountyHunter/Character/fsm/CharacterContext.h"
+#include "BountyHunter/Character/fsm/states/CharacterStates.h"
 #include "Components/EatComponent.h"
+#include "FSM/Chicken/ChickenContext.h"
+#include "FSM/Chicken/states/ChickenStates.h"
 #include "GameFramework/Character.h"
 
 
@@ -54,7 +58,7 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController
                   .WithGoal(goToGoal)
                   .WithPredicate(predicate1)
                   .WithPredicate(predicate2)
-                  .Build<NPCAgent>();
+                  .Build<NPCAgent<TLN::CharacterState, TLN::CharacterContext>>();
 }
 
 std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
@@ -68,5 +72,5 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 					.WithGoal(std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius))
 					.WithPerceptionSystem(sensorySystem)
 					.WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
-                    .Build<NPCAgent>();
+                    .Build<NPCAgent<TLN::Chicken::ChickenState, TLN::Chicken::ChickenContext>>();
 }
