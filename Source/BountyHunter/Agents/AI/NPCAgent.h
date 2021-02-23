@@ -7,7 +7,10 @@
 #include "goap/sensory/PerceptionSystem.h"
 #include "CoreMinimal.h"
 
+
+#include "BountyHunter/FSM/StatesMachineController.h"
 #include "goap/sensory/PerceptionSystem.h"
+#include "utils/fsm/StatesMachine.h"
 
 class IAgentAIController;
 
@@ -33,9 +36,11 @@ public:
 	void MoveTo(float elapsedTime, const glm::vec3& point) override;
 	IAgentAIController* GetController() const { return mController; }
 
+	void AddStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine);
+
 private:
 	IAgentAIController* mController;
-	//StatesMachineController<> mStatesMachineController;
+	StatesMachineController<TStateID, TContext> mStatesMachineController;
 };
 
 template<typename TStateID, class TContext>
@@ -93,4 +98,10 @@ void NPCAgent<TStateID, TContext>::MoveTo(float elapsedTime, const glm::vec3& po
 	{
 		throw std::logic_error("Controller is not alive! The agent must be removed.");
 	}
+}
+
+template <typename TStateID, class TContext>
+void NPCAgent<TStateID, TContext>::AddStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine)
+{
+	mStatesMachineController.AddMachine(machine);
 }

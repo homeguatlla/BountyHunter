@@ -185,11 +185,8 @@ void ABountyHunterCharacter::Tick(float DeltaSeconds)
 	}
 
 	//UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM:"));
-	for (auto&& machine : mStatesMachines)
-	{
-		machine->Update(DeltaSeconds);
-		//UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM state: %d"), machine->GetCurrentState()->GetID());
-	}
+	mStatesMachineController.Update(DeltaSeconds);
+	//UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM state: %d"), machine->GetCurrentState()->GetID());
 }
 
 bool ABountyHunterCharacter::IsWalking() const
@@ -206,7 +203,7 @@ bool ABountyHunterCharacter::IsIdle() const
 
 bool ABountyHunterCharacter::IsCasting() const
 {
-	return mStatesMachines[1]->GetCurrentState()->GetID() == CharacterState::STATE_CASTING;
+	return mStatesMachineController.GetCurrentStateID(1) == CharacterState::STATE_CASTING;
 }
 
 bool ABountyHunterCharacter::IsReadyToCast() const
@@ -301,27 +298,6 @@ void ABountyHunterCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	PlayerInputComponent->BindAxis("LookUpRate", this, &ABountyHunterCharacter::LookUpAtRate);
 }
 
-void ABountyHunterCharacter::CreateMovementStatesMachine()
-{
-	StatesMachineFactory factory;
-	
-	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
-}
-
-void ABountyHunterCharacter::CreateAbilityStatesMachine()
-{
-	StatesMachineFactory factory;
-	
-	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
-}
-
-void ABountyHunterCharacter::CreateDebugStatesMachine()
-{
-	StatesMachineFactory factory;
-	
-	mStatesMachines.push_back(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::DEBUG, mCharacterFSMContext)));
-}
-
 void ABountyHunterCharacter::CreateStatesMachine()
 {
 	mCharacterFSMContext = std::make_shared<CharacterContext>(
@@ -329,9 +305,12 @@ void ABountyHunterCharacter::CreateStatesMachine()
 		this,
 		mInputHandler,
 		mDebugData);
-	CreateMovementStatesMachine();
-	CreateAbilityStatesMachine();
-	CreateDebugStatesMachine();
+	
+	StatesMachineFactory factory;
+	
+	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::DEBUG, mCharacterFSMContext)));
 }
 
 void ABountyHunterCharacter::FillUpCharacterAttributes()

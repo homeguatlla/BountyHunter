@@ -16,6 +16,9 @@
 #include <BountyHunter/Character/AbilitiesToolBelt.h>
 #include <BountyHunter/Abilities/AbilitiesFactory.h>
 #include <BountyHunter/Debug/DebugData.h>
+
+#include "FSM/StatesMachineController.h"
+
 #include "BountyHunterCharacter.generated.h"
 
 class UInputComponent;
@@ -72,8 +75,7 @@ class ABountyHunterCharacter : public ACharacter, public ICharacter
 	TLN::AbilitiesToolBelt mAbilitiesToolBelt;
 
 	//States machine to control character states
-	using StatesMachine = core::utils::FSM::StatesMachine<TLN::CharacterState, TLN::CharacterContext>;
-	std::vector<std::unique_ptr<StatesMachine>> mStatesMachines;
+	StatesMachineController<TLN::CharacterState, TLN::CharacterContext> mStatesMachineController;
 	std::shared_ptr<TLN::CharacterContext> mCharacterFSMContext;
 
 	//Holds last input
@@ -201,9 +203,6 @@ protected:
 
 private:
 	void CreateStatesMachine();
-	void CreateMovementStatesMachine();
-	void CreateAbilityStatesMachine();
-	void CreateDebugStatesMachine();
 	void FillUpCharacterAttributes();
 	void FillUpAbilitiesFactory();
 	void AddDefaultAbilitiesToTheAbilitiesToolChest();

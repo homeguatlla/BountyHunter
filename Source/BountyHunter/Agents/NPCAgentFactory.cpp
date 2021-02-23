@@ -46,7 +46,10 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateAgent(
 
 std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController* controller, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
 {
-	NPCAgentBuilder builder;
+	NPCAgentBuilder<
+		NPCAgent<TLN::CharacterState, TLN::CharacterContext>,
+		TLN::CharacterState,
+		TLN::CharacterContext> builder;
 	
 	auto acceptanceRadius = 100.0f;
 	const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
@@ -58,12 +61,15 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController
                   .WithGoal(goToGoal)
                   .WithPredicate(predicate1)
                   .WithPredicate(predicate2)
-                  .Build<NPCAgent<TLN::CharacterState, TLN::CharacterContext>>();
+                  .Build();
 }
 
 std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
 {
-	NPCAgentBuilder builder;
+	NPCAgentBuilder<
+		NPCAgent<TLN::Chicken::ChickenState, TLN::Chicken::ChickenContext>,
+		TLN::Chicken::ChickenState,
+		TLN::Chicken::ChickenContext> builder;
 
 	auto acceptanceRadius = 100.0f;
 	return	builder.WithController(controller)
@@ -72,5 +78,5 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 					.WithGoal(std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius))
 					.WithPerceptionSystem(sensorySystem)
 					.WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
-                    .Build<NPCAgent<TLN::Chicken::ChickenState, TLN::Chicken::ChickenContext>>();
+                    .Build();
 }
