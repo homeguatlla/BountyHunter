@@ -9,7 +9,6 @@ public:
 	StatesMachineBuilder() = default;
 	~StatesMachineBuilder() = default;
 
-
 	StatesMachineBuilder<TStateID, TContext>& WithState(std::shared_ptr<core::utils::FSM::IState<TStateID, TContext>> state);
 	StatesMachineBuilder<TStateID, TContext>& WithTransition(std::unique_ptr<core::utils::FSM::ITransition<TStateID, TContext>> transition);
 	StatesMachineBuilder<TStateID, TContext>& WithInitialState(TStateID state);

@@ -18,6 +18,7 @@
 #include "AI/Predicates/Predicates.h"
 #include "BountyHunter/Character/fsm/CharacterContext.h"
 #include "BountyHunter/Character/fsm/states/CharacterStates.h"
+#include "BountyHunter/FSM/StatesMachineFactory.h"
 #include "Components/EatComponent.h"
 #include "FSM/Chicken/ChickenContext.h"
 #include "FSM/Chicken/states/ChickenStates.h"
@@ -71,6 +72,8 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 		TLN::Chicken::ChickenState,
 		TLN::Chicken::ChickenContext> builder;
 
+	StatesMachineFactory fsmFactory;
+	
 	auto acceptanceRadius = 100.0f;
 	return	builder.WithController(controller)
 					.WithEventDispatcher(mEventDispatcher)
@@ -78,5 +81,9 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 					.WithGoal(std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius))
 					.WithPerceptionSystem(sensorySystem)
 					.WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
+					.WithStatesMachine(
+						fsmFactory.CreateChicken(
+							FSMType::CHICKEN_MOVEMENT,
+							std::make_shared<TLN::Chicken::ChickenContext>(controller->GetWorld())))
                     .Build();
 }

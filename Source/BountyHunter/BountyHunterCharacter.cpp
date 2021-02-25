@@ -308,9 +308,9 @@ void ABountyHunterCharacter::CreateStatesMachine()
 	
 	StatesMachineFactory factory;
 	
-	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
-	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
-	mStatesMachineController.AddMachine(std::move(factory.Create<CharacterState, CharacterContext>(FSMType::DEBUG, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::DEBUG, mCharacterFSMContext)));
 }
 
 void ABountyHunterCharacter::FillUpCharacterAttributes()

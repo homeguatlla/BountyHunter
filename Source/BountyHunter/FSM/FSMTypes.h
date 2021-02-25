@@ -4,9 +4,8 @@ enum class FSMType
 {
 	CHARACTER_MOVEMENT = 0,
 	CHARACTER_ABILITY = 1,
-
+	DEBUG = 2,
+	
 	CHICKEN_MOVEMENT = 10,
 	CHICKEN_STATE = 11,
-	
-	DEBUG = 2
 };
