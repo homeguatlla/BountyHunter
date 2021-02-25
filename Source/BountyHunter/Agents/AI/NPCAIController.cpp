@@ -121,7 +121,8 @@ void ANPCAIController::CreateAgent(NPCTypes type)
 			const auto eventDispatcher = gameMode->GetEventDispatcher();
 			NPCAgentFactory factory(eventDispatcher, mNavigationPlanner);
 			mSensorySystem = std::make_shared<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>>();
-			mAgent = factory.CreateAgent(type, this, mSensorySystem);
+			const auto character = static_cast<ANPCCharacter*>(GetCharacter());
+			mAgent = factory.CreateAgent(type, this, character, mSensorySystem);
 
 			mAgent->StartUp();
 		}

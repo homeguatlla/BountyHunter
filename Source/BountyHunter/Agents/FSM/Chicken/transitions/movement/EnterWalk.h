@@ -3,6 +3,10 @@
 
 #include "BountyHunter/Agents/FSM/Chicken/states/ChickenStates.h"
 
+namespace TLN {
+	class INPCCharacter;
+}
+
 namespace TLN
 {
 	namespace Chicken
@@ -17,6 +21,8 @@ namespace TLN
 
 			void OnInit() override;
 			bool CanPerformTransition() const override;
+		private:
+			INPCCharacter* mCharacter;
 	};
 	}
 };

@@ -6,8 +6,10 @@ namespace TLN
 	namespace Chicken
 	{
 		ChickenContext::ChickenContext(
-            UWorld* world) :
-            mWorld {world}
+            UWorld* world,
+            INPCCharacter* character) :
+            mWorld {world},
+			mCharacter{character}
 		{
 		}
 	}

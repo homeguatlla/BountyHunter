@@ -1,7 +1,10 @@
 #pragma once
 #include <NAI/include/utils/fsm/BaseTransition.h>
-
 #include "BountyHunter/Agents/FSM/Chicken/states/ChickenStates.h"
+
+namespace TLN {
+	class INPCCharacter;
+}
 
 namespace TLN
 {
@@ -17,6 +20,9 @@ namespace TLN
 
 			void OnInit() override;
 			bool CanPerformTransition() const override;
+
+		private:
+			INPCCharacter* mCharacter;	
 		};
 	}
 };

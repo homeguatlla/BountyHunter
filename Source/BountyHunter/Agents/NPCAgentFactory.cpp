@@ -34,18 +34,22 @@ mNavigationPlanner{planner}
 std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateAgent(
 	NPCTypes type,
 	ANPCAIController* controller,
+	TLN::INPCCharacter* character,
 	std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem)
 {
 	switch (type) {
 	case Human:
-		return CreateHuman(controller, sensorySystem);
+		return CreateHuman(controller, character, sensorySystem);
 	case Chicken:
 	default:
-		return CreateChicken(controller, sensorySystem);
+		return CreateChicken(controller, character, sensorySystem);
 	}
 }
 
-std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController* controller, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(
+	ANPCAIController* controller,
+	TLN::INPCCharacter* character,
+	std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
 {
 	NPCAgentBuilder<
 		NPCAgent<TLN::CharacterState, TLN::CharacterContext>,
@@ -65,7 +69,10 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateHuman(ANPCAIController
                   .Build();
 }
 
-std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIController* controller, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
+std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(
+	ANPCAIController* controller,
+	TLN::INPCCharacter* character,
+	std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const
 {
 	NPCAgentBuilder<
 		NPCAgent<TLN::Chicken::ChickenState, TLN::Chicken::ChickenContext>,
@@ -84,6 +91,8 @@ std::shared_ptr<NAI::Goap::IAgent> NPCAgentFactory::CreateChicken(ANPCAIControll
 					.WithStatesMachine(
 						fsmFactory.CreateChicken(
 							FSMType::CHICKEN_MOVEMENT,
-							std::make_shared<TLN::Chicken::ChickenContext>(controller->GetWorld())))
+							std::make_shared<TLN::Chicken::ChickenContext>(
+								controller->GetWorld(),
+								character)))
                     .Build();
 }

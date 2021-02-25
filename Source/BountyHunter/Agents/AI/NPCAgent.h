@@ -70,6 +70,7 @@ template<typename TStateID, class TContext>
 void NPCAgent<TStateID, TContext>::Update(float elapsedTime)
 {
 	BaseAgent::Update(elapsedTime);
+	mStatesMachineController.Update(elapsedTime);
 }
 
 template<typename TStateID, class TContext>

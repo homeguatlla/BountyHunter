@@ -31,6 +31,7 @@ void StatesMachineController<TStateID, TContext>::Update(float elapsedTime)
 	for(auto&& machine : mMachines)
 	{
 		machine->Update(elapsedTime);
+		UE_LOG(LogTemp, Warning, TEXT("StatesMachineController state:%d"), machine->GetCurrentState()->GetID());
 	}
 }
 

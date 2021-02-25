@@ -300,6 +300,7 @@ void ABountyHunterCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 
 void ABountyHunterCharacter::CreateStatesMachine()
 {
+	//TODO el código relativo a la FSM debería estar en el PlayerController.
 	mCharacterFSMContext = std::make_shared<CharacterContext>(
 		GetWorld(),
 		this,
