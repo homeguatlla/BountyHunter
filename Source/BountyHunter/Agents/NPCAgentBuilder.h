@@ -21,66 +21,67 @@ namespace NAI {
 }
 
 class NPCAgentDecorator;
-
-template<class TAgent, typename TStateID, class TContext>
-class NPCAgentBuilder : public NAI::Goap::AgentBuilder
+namespace TLN
 {
-public:
-	NPCAgentBuilder() = default;
-	
-	NPCAgentBuilder& WithController(ANPCAIController* controller);
-	NPCAgentBuilder& WithEventDispatcher(AEventDispatcher* eventDispatcher);
-
-	NPCAgentBuilder& WithGoal(std::shared_ptr<NAI::Goap::IGoal> goal);
-	NPCAgentBuilder& WithPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
-	NPCAgentBuilder& WithGoapPlanner(std::shared_ptr<NAI::Goap::IGoapPlanner> planner);
-	NPCAgentBuilder& WithSensoryThreshold(const std::string& stimulusClassName, std::shared_ptr<NAI::Goap::IThreshold> threshold);
-	NPCAgentBuilder& WithPerceptionSystem(std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem);
-	NPCAgentBuilder& WithStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine);
-	std::shared_ptr<NAI::Goap::IAgent> Build();
-
-private:
-	ANPCAIController* mController;
-	AEventDispatcher* mEventDispatcher;
-	std::vector<std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>>> mMachines;
-};
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithController(ANPCAIController* controller)
+ class NPCAgentBuilder : public NAI::Goap::AgentBuilder
+	{
+	public:
+		NPCAgentBuilder() = default;
+	
+		NPCAgentBuilder& WithController(ANPCAIController* controller);
+		NPCAgentBuilder& WithEventDispatcher(AEventDispatcher* eventDispatcher);
+
+		NPCAgentBuilder& WithGoal(std::shared_ptr<NAI::Goap::IGoal> goal);
+		NPCAgentBuilder& WithPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
+		NPCAgentBuilder& WithGoapPlanner(std::shared_ptr<NAI::Goap::IGoapPlanner> planner);
+		NPCAgentBuilder& WithSensoryThreshold(const std::string& stimulusClassName, std::shared_ptr<NAI::Goap::IThreshold> threshold);
+		NPCAgentBuilder& WithPerceptionSystem(std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem);
+		NPCAgentBuilder& WithStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine);
+		std::shared_ptr<NAI::Goap::IAgent> Build();
+
+	private:
+		ANPCAIController* mController;
+		AEventDispatcher* mEventDispatcher;
+		std::vector<std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>>> mMachines;
+	};
+	template<class TAgent, typename TStateID, class TContext>
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithController(ANPCAIController* controller)
 	{
 		mController = controller;
 		return *this;
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithEventDispatcher(AEventDispatcher* eventDispatcher)
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithEventDispatcher(AEventDispatcher* eventDispatcher)
 	{
 		mEventDispatcher = eventDispatcher;
 		return *this;
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithGoal(std::shared_ptr<NAI::Goap::IGoal> goal)
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithGoal(std::shared_ptr<NAI::Goap::IGoal> goal)
 	{
 		AgentBuilder::WithGoal(goal);
 		return *this;
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
 	{
 		AgentBuilder::WithPredicate(predicate);
 		return *this;
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithGoapPlanner(std::shared_ptr<NAI::Goap::IGoapPlanner> planner)
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithGoapPlanner(std::shared_ptr<NAI::Goap::IGoapPlanner> planner)
 	{
 		AgentBuilder::WithGoapPlanner(planner);
 		return *this;
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithSensoryThreshold(const std::string& stimulusClassName,
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithSensoryThreshold(const std::string& stimulusClassName,
         std::shared_ptr<NAI::Goap::IThreshold> threshold)
 	{
 		AgentBuilder::WithSensoryThreshold(stimulusClassName, threshold);
@@ -88,7 +89,7 @@ private:
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithPerceptionSystem(
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithPerceptionSystem(
         std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem)
 	{
 		AgentBuilder::WithPerceptionSystem(sensorySystem);
@@ -96,15 +97,15 @@ private:
 	}
 
 	template<class TAgent, typename TStateID, class TContext>
-	NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithStatesMachine(
-		std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine)
+    NPCAgentBuilder<TAgent, TStateID, TContext>& NPCAgentBuilder<TAgent, TStateID, TContext>::WithStatesMachine(
+        std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine)
 	{
 		mMachines.push_back(machine);
 		return *this;
 	}
 	
 	template<class TAgent, typename TStateID, class TContext>
-	std::shared_ptr<NAI::Goap::IAgent> NPCAgentBuilder<TAgent, TStateID, TContext>::Build()
+    std::shared_ptr<NAI::Goap::IAgent> NPCAgentBuilder<TAgent, TStateID, TContext>::Build()
 	{
 		//TODO the NPCAgent, can be constructed from an IAgent and the extra parameters
 		//That way we can use here the Base Build and then create the NPCAgent(agent)
@@ -144,3 +145,4 @@ private:
 
 		return debugAgent;
 	}
+}

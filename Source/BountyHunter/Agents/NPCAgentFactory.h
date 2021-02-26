@@ -22,18 +22,21 @@ namespace NAI {
 	}
 }
 
-class NPCAgentFactory
+namespace TLN
 {
-public:
-	NPCAgentFactory(AEventDispatcher* eventDispatcher,std::shared_ptr<NAI::Navigation::INavigationPlanner> planner);
-	virtual ~NPCAgentFactory() = default;
+	class NPCAgentFactory
+	{
+	public:
+		NPCAgentFactory(AEventDispatcher* eventDispatcher,std::shared_ptr<NAI::Navigation::INavigationPlanner> planner);
+		virtual ~NPCAgentFactory() = default;
 
-	std::shared_ptr<NAI::Goap::IAgent> CreateAgent(NPCTypes type, ANPCAIController* controller, TLN::INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem);
+		std::shared_ptr<NAI::Goap::IAgent> CreateAgent(NPCTypes type, ANPCAIController* controller, INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem);
 
-private:
-	std::shared_ptr<NAI::Goap::IAgent> CreateHuman(ANPCAIController* controller, TLN::INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const;
-	std::shared_ptr<NAI::Goap::IAgent> CreateChicken(ANPCAIController* controller, TLN::INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const;
+	private:
+		std::shared_ptr<NAI::Goap::IAgent> CreateHuman(ANPCAIController* controller, INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const;
+		std::shared_ptr<NAI::Goap::IAgent> CreateChicken(ANPCAIController* controller, INPCCharacter* character, std::shared_ptr<NAI::Goap::SensorySystem<NAI::Goap::IStimulus>> sensorySystem) const;
 
-	AEventDispatcher* mEventDispatcher;
-	std::shared_ptr<NAI::Navigation::INavigationPlanner> mNavigationPlanner;
-};
+		AEventDispatcher* mEventDispatcher;
+		std::shared_ptr<NAI::Navigation::INavigationPlanner> mNavigationPlanner;
+	};
+}

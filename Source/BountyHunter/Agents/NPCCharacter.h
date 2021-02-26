@@ -16,4 +16,5 @@ public:
 	TEnumAsByte<NPCTypes> GetNPCType() { return mType; }
 
 	float GetMovementSpeed() const override;
+	bool IsEating() const override;
 };

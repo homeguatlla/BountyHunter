@@ -6,5 +6,6 @@ namespace TLN
 	{
 	public:
 		virtual float GetMovementSpeed() const = 0;
+		virtual bool IsEating() const = 0;
 	};
 }
