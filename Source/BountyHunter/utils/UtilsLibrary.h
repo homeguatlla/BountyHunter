@@ -3,6 +3,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include <glm/glm.hpp>
+#include <glm/trigonometric.hpp>
 #include <string>
 
 namespace utils
@@ -145,6 +146,16 @@ class UtilsLibrary
 			q.Z = axis.Z * s;
 			q.W = (float)FGenericPlatformMath::Cos(halfAngle);
 			return q;
+		}
+
+	static glm::vec2 CalculatePointAtCircle(const glm::vec2& center, float radius)
+		{
+			const float angle = std::rand() % 360;
+			const auto angleRad = glm::radians<float>(angle);
+			const auto x = radius * glm::cos(angleRad);
+			const auto y = radius * glm::sin(angleRad);
+
+			return center + glm::vec2(x, y);
 		}
 };
 }

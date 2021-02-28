@@ -17,7 +17,6 @@ namespace NAI {
 
 class NavigationPlanner : public NAI::Navigation::INavigationPlanner
 {
-private:
 	struct Location
 	{
 		std::string name;
@@ -34,6 +33,7 @@ public:
 	void GetPathFromTo(const glm::vec3& origin, const glm::vec3& destination, PathFromToCallback callback) override;
 	bool FillWithLocationGivenAName(const std::string& locationName, glm::vec3& location) const override;	
 	unsigned int GetAproxCost(const glm::vec3& origin, const glm::vec3& destination) const override;
+	bool GetRandomReachablePointInRadius(const glm::vec3& from, float radius, glm::vec3& reachableLocation) const override;
 	
 private:
 	void FindLocations();

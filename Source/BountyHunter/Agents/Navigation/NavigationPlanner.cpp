@@ -12,6 +12,10 @@
 #include <algorithm>
 #include <sstream>
 
+
+#include "PropertyEditorModule.h"
+#include "BountyHunter/utils/UtilsLibrary.h"
+
 NavigationPlanner::NavigationPlanner(UWorld* world) : mWorld(world)
 {
 	FindLocations();
@@ -69,13 +73,13 @@ std::shared_ptr<NAI::Navigation::INavigationPath> NavigationPlanner::CreateNavig
 
 void NavigationPlanner::OnPathFound(uint32 aPathId, ENavigationQueryResult::Type aResultType, FNavPathSharedPtr aNavPointer)
 {
-	auto navigationPath = CreateNavigationPath(aNavPointer->GetPathPoints());
+	const auto navigationPath = CreateNavigationPath(aNavPointer->GetPathPoints());
 	mPathFromToCallback(navigationPath);
 }
 
 bool NavigationPlanner::FillWithLocationGivenAName(const std::string& locationName, glm::vec3& location) const
 {
-	auto it = std::find_if(mLocations.begin(), mLocations.end(), 
+	const auto it = std::find_if(mLocations.begin(), mLocations.end(), 
         [&locationName](const Location& location){
             return location.name == locationName;
         });
@@ -102,8 +106,8 @@ unsigned int NavigationPlanner::GetAproxCost(const glm::vec3& origin, const glm:
 
 	if (location1.name != location2.name)
 	{
-		auto key = std::pair<std::string, std::string>(location1.name, location2.name);
-		auto it = mCostMatrix.find(key);
+		const auto key = std::pair<std::string, std::string>(location1.name, location2.name);
+		const auto it = mCostMatrix.find(key);
 		if(it != mCostMatrix.end())
 		{
 			return it->second;
@@ -117,9 +121,27 @@ unsigned int NavigationPlanner::GetAproxCost(const glm::vec3& origin, const glm:
 	return 0;
 }
 
+bool NavigationPlanner::GetRandomReachablePointInRadius(const glm::vec3& from, float radius, glm::vec3& reachableLocation) const
+{
+	const auto currentNavigationSystem = UNavigationSystemV1::GetCurrent(mWorld);
+	FNavLocation resultLocation;
+	const bool found = currentNavigationSystem->GetRandomReachablePointInRadius(
+		utils::UtilsLibrary::ConvertToFVector(from),
+		radius,
+		resultLocation,
+		nullptr);
+
+	if(found)
+	{
+		reachableLocation = utils::UtilsLibrary::ConvertToVec3(resultLocation.Location);	
+	}
+	
+	return found;
+}
+
 std::string NavigationPlanner::GetLocationNameGivenAWayPoint(AActor* wayPoint) const
 {
-	FString locationName = wayPoint->GetName();
+	const FString locationName = wayPoint->GetName();
 	int32 index;
 	locationName.FindChar('_', index);
 	return std::string(TCHAR_TO_UTF8(*locationName.Left(index)));
@@ -132,8 +154,8 @@ NavigationPlanner::Location NavigationPlanner::FindLocationNearest(const glm::ve
 
 	for (auto location : mLocations)
 	{
-		FVector locationPoint = location.wayPoint->GetActorLocation();
-		auto distance = glm::distance(point, glm::vec3(locationPoint.X, locationPoint.Y, locationPoint.Z));
+		const FVector locationPoint = location.wayPoint->GetActorLocation();
+		const auto distance = glm::distance(point, glm::vec3(locationPoint.X, locationPoint.Y, locationPoint.Z));
 		if (distance < minDistance)
 		{
 			nearestLocation = location;
@@ -152,7 +174,7 @@ void NavigationPlanner::CalculateCostMatrix()
 	{
 		for (auto j = i + 1; j < mLocations.size(); ++j)
 		{
-			auto path = currentNavigationSystem->FindPathToLocationSynchronously(
+			const auto path = currentNavigationSystem->FindPathToLocationSynchronously(
 				mWorld,
 				mLocations[i].wayPoint->GetActorLocation(),
 				mLocations[j].wayPoint->GetActorLocation()

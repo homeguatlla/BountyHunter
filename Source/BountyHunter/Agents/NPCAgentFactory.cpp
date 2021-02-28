@@ -23,6 +23,7 @@
 #include "FSM/Chicken/ChickenContext.h"
 #include "FSM/Chicken/states/ChickenStates.h"
 #include "GameFramework/Character.h"
+#include "goap/BasePredicate.h"
 
 namespace TLN
 {
@@ -59,8 +60,8 @@ namespace TLN
 	
 		auto acceptanceRadius = 100.0f;
 		const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
-		const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, "GoTo", "GeneralStore");
-		const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID + 1, "GoTo", "Saloon");
+		const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, GOTO_PREDICATE_NAME, "GeneralStore");
+		const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID + 1, GOTO_PREDICATE_NAME, "Saloon");
 		return builder.WithController(controller)
                       .WithEventDispatcher(mEventDispatcher)
                       .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
@@ -87,6 +88,7 @@ namespace TLN
                         .WithEventDispatcher(mEventDispatcher)
                         .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())
                         .WithGoal(std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius))
+						.WithPredicate(std::make_shared<NAI::Goap::BasePredicate>(EXPLORE_PREDICATE_ID, EXPLORE_PREDICATE_NAME))
                         .WithPerceptionSystem(sensorySystem)
                         .WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
                         .WithStatesMachine(
