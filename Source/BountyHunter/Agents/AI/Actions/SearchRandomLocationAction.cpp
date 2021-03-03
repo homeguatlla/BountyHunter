@@ -1,6 +1,4 @@
 ﻿#include "SearchRandomLocationAction.h"
-
-
 #include "BountyHunter/Agents/AI/Goals/ExploreGoal.h"
 #include "BountyHunter/utils/UtilsLibrary.h"
 #include "navigation/INavigationPlanner.h"
