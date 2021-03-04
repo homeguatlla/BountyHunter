@@ -21,7 +21,7 @@ mRadius{radius}
 
 void SearchRandomLocationAction::DoProcess(float elapsedTime)
 {
-	//TODO hay que hacer esto varias veces si no encuentra una posición.
+	//Si no encuentra una posición, en el próximo DoProcess volverá a probar.
 	glm::vec3 location;
 	const auto result = mNavigationPlanner->GetRandomReachablePointInRadius(mCenter, mRadius, location);
 	if(result)

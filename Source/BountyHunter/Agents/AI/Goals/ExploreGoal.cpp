@@ -5,8 +5,6 @@
 #include "BountyHunter/Agents/Components/IExploreComponent.h"
 
 #include "goap/IPredicate.h"
-#include "goap/predicates/GoToPredicate.h"
-#include "goap/predicates/GoapPredicates.h"
 #include "goap/predicates/PlaceIamPredicate.h"
 
 #include "navigation/INavigationPath.h"
@@ -14,7 +12,7 @@
 #include <goap/GoapUtils.h>
 #include <goap/IAction.h>
 #include <goap/sensory/IStimulus.h>
-
+#include <glm/gtx/string_cast.hpp>
 
 ExploreGoal::ExploreGoal(IIExploreComponent* exploreComponent,
                          const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner,
@@ -39,6 +37,12 @@ void ExploreGoal::DoReset(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& p
 void ExploreGoal::DoAccomplished(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
 	RemovePredicates(predicates);
+
+	predicates.push_back(
+		std::make_shared<NAI::Goap::PlaceIamPredicate>(
+			NAI::Goap::PLACE_IAM_PREDICATE_ID,
+			"PlaceIam",
+			glm::to_string(mLocation)));
 }
 
 std::shared_ptr<NAI::Goap::IPredicate> ExploreGoal::DoTransformStimulusIntoPredicates(
@@ -61,6 +65,7 @@ void ExploreGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredi
 {
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_TO_PREDICATE_NAME);
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_GOT_PATH_PREDICATE_NAME);
+	NAI::Goap::Utils::RemovePredicateWith(predicates, "PlaceIam");
 }
 
 void ExploreGoal::OnExploreLocation(const glm::vec3& location)
@@ -73,7 +78,7 @@ void ExploreGoal::OnNavigationPath(const std::string& placeName, const std::shar
 {
 	if(!path->Empty())
 	{
-		mActions.push_back(CreateFollowPathAction(mAgent, placeName, path));
+		mActions.push_back(CreateFollowPathAction(mAgent, path));
 	}
 	else
 	{
@@ -116,12 +121,11 @@ std::shared_ptr<NAI::Goap::FindPathToAction> ExploreGoal::CreateFindPathToAction
 	return findPathTo;
 }
 
-std::shared_ptr<NAI::Goap::FollowPathAction> ExploreGoal::CreateFollowPathAction(const std::weak_ptr<NAI::Goap::IAgent>& agent, const std::string& placeName, const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const
+std::shared_ptr<NAI::Goap::FollowPathAction> ExploreGoal::CreateFollowPathAction(const std::weak_ptr<NAI::Goap::IAgent>& agent, const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const
 {
 	std::vector<std::string> preConditions;
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
 	preConditions.push_back(EXPLORE_GOT_PATH_PREDICATE_NAME);
-	postConditions.push_back(std::make_shared<NAI::Goap::PlaceIamPredicate>(NAI::Goap::PLACE_IAM_PREDICATE_ID, "PlaceIam", placeName));
 
 	auto followPathTo = std::make_shared<NAI::Goap::FollowPathAction>(preConditions, postConditions, agent, navigationPath, mPrecision);
 

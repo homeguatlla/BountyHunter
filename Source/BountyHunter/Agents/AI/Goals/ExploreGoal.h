@@ -12,7 +12,7 @@ public:
 	ExploreGoal(
 		IIExploreComponent* exploreComponent,
 		const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner,
-		float precision = 0.01f);
+		float precision = 10.0f);
 	
 	virtual ~ExploreGoal() = default;
 	unsigned GetCost() const override { return 100; }
@@ -35,7 +35,6 @@ protected:
 	std::shared_ptr<NAI::Goap::IAction> CreateExploreAction();
 	std::shared_ptr<NAI::Goap::FollowPathAction> CreateFollowPathAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,
-		const std::string& placeName,
 		const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const;
 	std::shared_ptr<NAI::Goap::FindPathToAction> CreateFindPathToAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,

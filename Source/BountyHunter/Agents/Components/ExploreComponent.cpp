@@ -21,7 +21,8 @@ void UExploreComponent::BeginPlay()
 	controller->AddNewGoal(
 		std::make_shared<ExploreGoal>(
 			this,
-			controller->GetNavigationPlanner()));
+			controller->GetNavigationPlanner(),
+			100.0f));//1meter
 }
 
 bool UExploreComponent::IsExploring() const
