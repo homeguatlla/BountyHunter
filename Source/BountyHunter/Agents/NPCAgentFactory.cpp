@@ -60,8 +60,8 @@ namespace TLN
 	
 		auto acceptanceRadius = 100.0f;
 		const auto goToGoal = std::make_shared<NAI::Goap::GoToGoal>(mNavigationPlanner, acceptanceRadius);
-		const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, GOTO_PREDICATE_NAME, "GeneralStore");
-		const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID + 1, GOTO_PREDICATE_NAME, "Saloon");
+		const auto predicate1 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, NAI::Goap::PREDICATE_GO_TO_NAME, "GeneralStore");
+		const auto predicate2 = std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID + 1, NAI::Goap::PREDICATE_GO_TO_NAME, "Saloon");
 		return builder.WithController(controller)
                       .WithEventDispatcher(mEventDispatcher)
                       .WithGoapPlanner(std::make_shared<NAI::Goap::TreeGoapPlanner>())

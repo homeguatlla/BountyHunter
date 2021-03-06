@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <string>
 
-const std::string GOTO_PREDICATE_NAME("GoTo");
 const std::string IM_HUNGRY_PREDICATE_NAME("ImHungry");
 const std::string FOOD_PREDICATE_NAME("Food");
 const std::string EXPLORE_PREDICATE_NAME("Explore");

@@ -67,7 +67,8 @@ void ExploreGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredi
 {
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_TO_PREDICATE_NAME);
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_GOT_PATH_PREDICATE_NAME);
-	NAI::Goap::Utils::RemovePredicateWith(predicates, "PlaceIam");
+	NAI::Goap::Utils::RemovePredicateWith(predicates, NAI::Goap::PLACE_IAM_PREDICATE_NAME);
+	NAI::Goap::Utils::RemovePredicateWith(predicates, WAIT_PREDICATE_NAME);
 }
 
 void ExploreGoal::OnExploreLocation(const glm::vec3& location)
