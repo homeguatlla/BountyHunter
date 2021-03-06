@@ -14,6 +14,8 @@
 #include <goap/sensory/IStimulus.h>
 #include <glm/gtx/string_cast.hpp>
 
+#include "BountyHunter/Agents/AI/Actions/WaitAction.h"
+
 ExploreGoal::ExploreGoal(IIExploreComponent* exploreComponent,
                          const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner,
                          float precision) :
@@ -61,7 +63,7 @@ void ExploreGoal::AddActions()
 	mActions.push_back(CreateExploreAction());
 }
 
-void ExploreGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
+void ExploreGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) const
 {
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_TO_PREDICATE_NAME);
 	NAI::Goap::Utils::RemovePredicateWith(predicates, EXPLORE_GOT_PATH_PREDICATE_NAME);
@@ -79,6 +81,7 @@ void ExploreGoal::OnNavigationPath(const std::string& placeName, const std::shar
 	if(!path->Empty())
 	{
 		mActions.push_back(CreateFollowPathAction(mAgent, path));
+		mActions.push_back(CreateWaitAction(mExploreComponent->GetWaitingTimeBetweenLocations()));
 	}
 	else
 	{
@@ -116,9 +119,9 @@ std::shared_ptr<NAI::Goap::FindPathToAction> ExploreGoal::CreateFindPathToAction
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions = {std::make_shared<NAI::Goap::BasePredicate>(EXPLORE_GOT_PATH_PREDICATE_ID, EXPLORE_GOT_PATH_PREDICATE_NAME)};
 
 	const auto goal = std::static_pointer_cast<ExploreGoal>(shared_from_this());
-	auto findPathTo = std::make_shared<NAI::Goap::FindPathToAction>(goal, preConditions, postConditions, agent, navigationPlanner);
+	auto action = std::make_shared<NAI::Goap::FindPathToAction>(goal, preConditions, postConditions, agent, navigationPlanner);
 
-	return findPathTo;
+	return action;
 }
 
 std::shared_ptr<NAI::Goap::FollowPathAction> ExploreGoal::CreateFollowPathAction(const std::weak_ptr<NAI::Goap::IAgent>& agent, const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const
@@ -126,8 +129,20 @@ std::shared_ptr<NAI::Goap::FollowPathAction> ExploreGoal::CreateFollowPathAction
 	std::vector<std::string> preConditions;
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
 	preConditions.push_back(EXPLORE_GOT_PATH_PREDICATE_NAME);
+	postConditions.push_back(std::make_shared<NAI::Goap::BasePredicate>(WAIT_PREDICATE_ID, WAIT_PREDICATE_NAME));
 
-	auto followPathTo = std::make_shared<NAI::Goap::FollowPathAction>(preConditions, postConditions, agent, navigationPath, mPrecision);
+	auto action = std::make_shared<NAI::Goap::FollowPathAction>(preConditions, postConditions, agent, navigationPath, mPrecision);
 
-	return followPathTo;
+	return action;
+}
+
+std::shared_ptr<WaitAction> ExploreGoal::CreateWaitAction(float waitingTimeBetweenLocations) const
+{
+	std::vector<std::string> preConditions;
+	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
+	preConditions.push_back(WAIT_PREDICATE_NAME);
+	
+	auto action = std::make_shared<WaitAction>(preConditions, postConditions, 0, waitingTimeBetweenLocations);
+
+	return action;
 }

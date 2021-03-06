@@ -20,11 +20,16 @@ public:
 	
 	bool IsExploring() const override;
 	float GetExplorationRadius() const override { return Radius; }
+	float GetWaitingTimeBetweenLocations() const override { return WaitingTimeBetweenLocations; }
 
-	/** Time in seconds the agent can stay without eat per amount eaten */
+	/** Radius of exploration from Pawn Position */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
 	float Radius;
 
+	/** Time in seconds before explore a new location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
+	float WaitingTimeBetweenLocations;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

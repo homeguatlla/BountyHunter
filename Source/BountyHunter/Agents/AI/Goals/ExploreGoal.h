@@ -4,6 +4,7 @@
 #include "goap/agent/IAgent.h"
 #include "goap/goals/GoToGoal.h"
 
+class WaitAction;
 class IIExploreComponent;
 
 class ExploreGoal : public NAI::Goap::BaseGoal, public NAI::Goap::IGoToGoal
@@ -15,7 +16,7 @@ public:
 		float precision = 10.0f);
 	
 	virtual ~ExploreGoal() = default;
-	unsigned GetCost() const override { return 100; }
+	unsigned GetCost() const override { return 100; } //TODO maybe 
 	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates) const override { return 100; }	
 	void OnExploreLocation(const glm::vec3& location);
 	void OnNavigationPath(const std::string& placeName, const std::shared_ptr<NAI::Navigation::INavigationPath>& path) override;
@@ -30,12 +31,13 @@ protected:
 	void DoCancel(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) override;
 	
 	void AddActions();
-	void RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates);
+	void RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) const;
 	
 	std::shared_ptr<NAI::Goap::IAction> CreateExploreAction();
 	std::shared_ptr<NAI::Goap::FollowPathAction> CreateFollowPathAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,
 		const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const;
+	std::shared_ptr<WaitAction> CreateWaitAction(float waitingTimeBetweenLocations) const;
 	std::shared_ptr<NAI::Goap::FindPathToAction> CreateFindPathToAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,
 		const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner);

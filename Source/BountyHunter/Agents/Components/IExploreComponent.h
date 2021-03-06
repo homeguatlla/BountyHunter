@@ -19,4 +19,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
     virtual float GetExplorationRadius() const = 0;
+	
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
+    virtual float GetWaitingTimeBetweenLocations() const = 0;
 };
