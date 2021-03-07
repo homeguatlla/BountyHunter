@@ -12,6 +12,7 @@ namespace TLN
             STATE_JUMPING = 3,
             STATE_ON_AIR = 4,
 			STATE_EAT = 5,
+			STATE_EXPLORE = 6
         };
 	};
 }

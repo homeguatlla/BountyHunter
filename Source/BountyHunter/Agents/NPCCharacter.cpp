@@ -1,6 +1,7 @@
 ﻿#include "NPCCharacter.h"
 
 #include "Components/EatComponent.h"
+#include "Components/ExploreComponent.h"
 
 float ANPCCharacter::GetMovementSpeed() const
 {
@@ -9,16 +10,23 @@ float ANPCCharacter::GetMovementSpeed() const
 
 bool ANPCCharacter::IsEating() const
 {
-	const auto eatComponent = FindComponentByClass<UEatComponent>();
-	check(eatComponent != nullptr && eatComponent->GetClass()->ImplementsInterface(UIEatComponent::StaticClass()));
+	const auto eatComponent = GetComponent<UEatComponent, IIEatComponent, UIEatComponent>();
+	if(eatComponent)
+	{
+		return eatComponent->IsEating();
+	}
 
-	if(!eatComponent)
+	return false;
+}
+
+
+bool ANPCCharacter::IsExploring() const
+{
+	const auto exploreComponent = GetComponent<UExploreComponent, IIExploreComponent, UIExploreComponent>();
+	if(exploreComponent)
 	{
-		return false;
+		return exploreComponent->IsExploring();
 	}
-	else
-	{
-		const auto eatInterface = TScriptInterface<IIEatComponent>(eatComponent);
-		return eatInterface->IsEating();
-	}
+
+	return false;
 }

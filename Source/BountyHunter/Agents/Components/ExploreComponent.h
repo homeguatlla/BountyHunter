@@ -17,7 +17,8 @@ class BOUNTYHUNTER_API UExploreComponent : public UNPCAgentComponent, public IIE
 public:
 	// Sets default values for this component's properties
 	UExploreComponent();
-	
+
+	void SetExplore(bool isExploring) override { mIsExploring = isExploring; }
 	bool IsExploring() const override;
 	float GetExplorationRadius() const override { return Radius; }
 	float GetWaitingTimeBetweenLocations() const override { return WaitingTimeBetweenLocations; }

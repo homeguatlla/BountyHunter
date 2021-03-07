@@ -97,6 +97,12 @@ namespace TLN
                                 std::make_shared<Chicken::ChickenContext>(
                                     controller->GetWorld(),
                                     character)))
+						.WithStatesMachine(
+							fsmFactory.CreateChicken(
+								FSMType::CHICKEN_STATE,
+								std::make_shared<Chicken::ChickenContext>(
+				                    controller->GetWorld(),
+				                    character)))
                         .Build();
 	}
 }

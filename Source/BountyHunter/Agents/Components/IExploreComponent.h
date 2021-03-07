@@ -15,6 +15,9 @@ class IIExploreComponent
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
+    virtual void SetExplore(bool isExploring) = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
     virtual bool IsExploring() const = 0;
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")

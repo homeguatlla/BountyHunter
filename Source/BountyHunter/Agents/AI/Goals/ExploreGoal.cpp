@@ -38,6 +38,7 @@ void ExploreGoal::DoReset(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& p
 
 void ExploreGoal::DoAccomplished(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
+	mExploreComponent->SetExplore(false);
 	RemovePredicates(predicates);
 
 	predicates.push_back(
@@ -55,6 +56,7 @@ std::shared_ptr<NAI::Goap::IPredicate> ExploreGoal::DoTransformStimulusIntoPredi
 
 void ExploreGoal::DoCancel(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
+	mExploreComponent->SetExplore(false);
 	RemovePredicates(predicates);
 }
 
@@ -110,8 +112,8 @@ std::shared_ptr<NAI::Goap::IAction> ExploreGoal::CreateExploreAction()
         cost,
         goal,
         mNavigationPlanner,
-        mAgent->GetPosition(),
-        mExploreComponent->GetExplorationRadius());       
+        mExploreComponent,
+        mAgent->GetPosition());       
 }
 
 std::shared_ptr<NAI::Goap::FindPathToAction> ExploreGoal::CreateFindPathToAction(const std::weak_ptr<NAI::Goap::IAgent>& agent, const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner)

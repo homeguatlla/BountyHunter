@@ -27,8 +27,8 @@ public:
             unsigned int cost,
             const std::shared_ptr<ExploreGoal>& goal,
             const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner,
-            const glm::vec3& center,
-            float radius);
+            IIExploreComponent* exploreComponent,
+            const glm::vec3& center);
 	virtual ~SearchRandomLocationAction() = default;
 
 protected:
@@ -36,6 +36,6 @@ protected:
 private:
 	std::shared_ptr<ExploreGoal> mGoal;
 	std::shared_ptr<NAI::Navigation::INavigationPlanner> mNavigationPlanner;
-	glm::vec3 mCenter;
-	float mRadius;
+	IIExploreComponent* mExploreComponent;
+	glm::vec3 mCenter;	
 };

@@ -1,5 +1,5 @@
 
-#include "BountyHunter/Agents/FSM/Chicken/states/movement/Eat.h"
+#include "BountyHunter/Agents/FSM/Chicken/states/state/Eat.h"
 
 namespace TLN
 {

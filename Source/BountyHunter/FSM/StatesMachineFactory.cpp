@@ -1,4 +1,6 @@
 ﻿#include "StatesMachineFactory.h"
+
+//FSM Character
 #include <BountyHunter/Character/fsm/states/movement/Walk.h>
 #include <BountyHunter/Character/fsm/states/movement/Idle.h>
 
@@ -18,20 +20,29 @@
 #include <BountyHunter/Character/fsm/transitions/abilities/EnterIdleAbility.h>
 #include <BountyHunter/Character/fsm/transitions/abilities/EnterCooldown.h>
 
+//FSM debug
 #include <BountyHunter/Character/fsm/transitions/debug/EnterNormal.h>
 #include <BountyHunter/Character/fsm/transitions/debug/EnterDebug.h>
 #include <BountyHunter/Character/fsm/transitions/debug/EnterNextNPC.h>
 #include <BountyHunter/Character/fsm/transitions/debug/EnterPreviousNPC.h>
 #include <BountyHunter/Character/fsm/transitions/debug/LeaveState.h>
 
+//Chicken FSM movement
 #include <BountyHunter/Agents/FSM/Chicken/states/movement/Idle.h>
 #include <BountyHunter/Agents/FSM/Chicken/states/movement/Walk.h>
-#include <BountyHunter/Agents/FSM/Chicken/states/movement/Eat.h>
 
-#include <BountyHunter/Agents/FSM/Chicken/transitions/movement/EnterEat.h>
-#include <BountyHunter/Agents/FSM/Chicken/transitions/movement/LeaveEat.h>
 #include <BountyHunter/Agents/FSM/Chicken/transitions/movement/EnterIdle.h>
 #include <BountyHunter/Agents/FSM/Chicken/transitions/movement/EnterWalk.h>
+
+//Chicken FSM state
+#include <BountyHunter/Agents/FSM/Chicken/states/state/Eat.h>
+#include "BountyHunter/Agents/FSM/Chicken/states/state/Explore.h"
+#include "BountyHunter/Agents/FSM/Chicken/states/state/IdleState.h"
+
+#include <BountyHunter/Agents/FSM/Chicken/transitions/state/EnterEat.h>
+#include <BountyHunter/Agents/FSM/Chicken/transitions/state/LeaveEat.h>
+#include "BountyHunter/Agents/FSM/Chicken/transitions/state/EnterExplore.h"
+#include "BountyHunter/Agents/FSM/Chicken/transitions/state/LeaveExplore.h"
 
 #include "StatesMachineBuilder.h"
 
@@ -106,13 +117,25 @@ namespace TLN
 			{
 				auto idle = std::make_shared<TLN::Chicken::Idle>();
 				auto walk = std::make_shared<TLN::Chicken::Walk>();
-				auto eat = std::make_shared<TLN::Chicken::Eat>();
 				
 				return builder.WithState(idle)
                               .WithState(walk)
-                              .WithState(eat)
                               .WithTransition(std::make_unique<TLN::Chicken::EnterWalk>(idle, walk))
                               .WithTransition(std::make_unique<TLN::Chicken::EnterIdle>(walk, idle))
+                              .WithInitialState(idle->GetID())
+                              .Build(context);
+			}
+		case FSMType::CHICKEN_STATE:
+			{
+				auto idle = std::make_shared<TLN::Chicken::IdleState>();
+				auto explore = std::make_shared<TLN::Chicken::Explore>();
+				auto eat = std::make_shared<TLN::Chicken::Eat>();
+				
+				return builder.WithState(idle)
+                              .WithState(explore)
+                              .WithState(eat)
+                              .WithTransition(std::make_unique<TLN::Chicken::EnterExplore>(idle, explore))
+                              .WithTransition(std::make_unique<TLN::Chicken::LeaveExplore>(explore, idle))
                               .WithTransition(std::make_unique<TLN::Chicken::EnterEat>(idle, eat))
                               .WithTransition(std::make_unique<TLN::Chicken::LeaveEat>(eat, idle))
                               .WithInitialState(idle->GetID())

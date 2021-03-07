@@ -23,7 +23,7 @@ namespace NAI {
 class NPCAgentDecorator;
 namespace TLN
 {
-	template<class TAgent, typename TStateID, class TContext>
+template<class TAgent, typename TStateID, class TContext>
  class NPCAgentBuilder : public NAI::Goap::AgentBuilder
 	{
 	public:
