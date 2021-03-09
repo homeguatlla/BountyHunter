@@ -20,7 +20,7 @@ namespace NAI {
 	}
 }
 
-class NPCAgentDecorator;
+
 namespace TLN
 {
 template<class TAgent, typename TStateID, class TContext>
@@ -109,7 +109,7 @@ template<class TAgent, typename TStateID, class TContext>
 	{
 		//TODO the NPCAgent, can be constructed from an IAgent and the extra parameters
 		//That way we can use here the Base Build and then create the NPCAgent(agent)
-		std::shared_ptr<NAI::Goap::IAgent> agent;
+		std::shared_ptr<TAgent> agent;
 
 		if(mSensorySystem)
 		{
@@ -141,7 +141,7 @@ template<class TAgent, typename TStateID, class TContext>
 		}
 		
 		//TODO if is debug
-		auto debugAgent = std::make_shared<NPCAgentDebugDecorator>(agent, mController, mEventDispatcher);
+		auto debugAgent = std::make_shared<NPCAgentDebugDecorator<TStateID, TContext>>(agent, mController, mEventDispatcher);
 
 		return debugAgent;
 	}

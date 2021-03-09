@@ -17,6 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPreviousNPC, const ANPCAIController
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FLogPredicate, const ANPCAIController*, controller, int, type, const FString&, text);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLogClear, const ANPCAIController*, controller);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FLogState, const ANPCAIController*, controller, const FString&, state);
 
 
 UCLASS(Blueprintable)
@@ -53,4 +54,6 @@ class AEventDispatcher : public AActor
 		FLogPredicate OnLogPredicate;
 		UPROPERTY(BlueprintAssignable, Category = "Agent Log")
 		FLogClear OnLogClear;
+		UPROPERTY(BlueprintAssignable, Category = "Agent Log")
+		FLogState OnLogState;
 };

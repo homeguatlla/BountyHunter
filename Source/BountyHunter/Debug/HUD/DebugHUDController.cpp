@@ -44,6 +44,7 @@ void ADebugHUDController::BindToDelegate()
 		eventDispatcher->OnLogClear.AddDynamic(this, &ADebugHUDController::OnLogClear);
 		eventDispatcher->OnNextNPC.AddDynamic(this, &ADebugHUDController::OnNextNPC);
 		eventDispatcher->OnPreviousNPC.AddDynamic(this, &ADebugHUDController::OnPreviousNPC);
+		eventDispatcher->OnLogState.AddDynamic(this, &ADebugHUDController::OnLogState);
 	}
 }
 
@@ -88,5 +89,13 @@ void ADebugHUDController::OnPreviousNPC(const ANPCAIController* controller)
 	if (mAgentDebugHUDWidget->GetClass()->ImplementsInterface(UAgentDebugHUD::StaticClass()))
 	{
 		IAgentDebugHUD::Execute_OnPreviousNPC(mAgentDebugHUDWidget, controller);
+	}
+}
+
+void ADebugHUDController::OnLogState(const ANPCAIController* controller, const FString& state)
+{
+	if (mAgentDebugHUDWidget->GetClass()->ImplementsInterface(UAgentDebugHUD::StaticClass()))
+	{
+		IAgentDebugHUD::Execute_OnLogState(mAgentDebugHUDWidget, controller, state);
 	}
 }

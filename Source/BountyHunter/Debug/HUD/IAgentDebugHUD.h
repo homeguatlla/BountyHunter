@@ -25,4 +25,6 @@ public:
 	void OnNextNPC(const ANPCAIController* controller);
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Agent Log")
 	void OnPreviousNPC(const ANPCAIController* controller);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "Agent Log")
+    void OnLogState(const ANPCAIController* controller, const FString& state);
 };

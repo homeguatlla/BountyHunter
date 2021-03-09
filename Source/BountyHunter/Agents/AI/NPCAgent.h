@@ -37,6 +37,7 @@ public:
 	IAgentAIController* GetController() const { return mController; }
 
 	void AddStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine);
+	TStateID GetCurrentStateID(unsigned int machineIndex) const;
 
 private:
 	IAgentAIController* mController;
@@ -105,4 +106,10 @@ template <typename TStateID, class TContext>
 void NPCAgent<TStateID, TContext>::AddStatesMachine(std::shared_ptr<core::utils::FSM::StatesMachine<TStateID, TContext>> machine)
 {
 	mStatesMachineController.AddMachine(machine);
+}
+
+template <typename TStateID, class TContext>
+TStateID NPCAgent<TStateID, TContext>::GetCurrentStateID(unsigned machineIndex) const
+{
+	return mStatesMachineController.GetCurrentStateID(machineIndex);
 }

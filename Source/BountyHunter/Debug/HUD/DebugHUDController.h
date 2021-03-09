@@ -33,7 +33,9 @@ public:
 	void OnNextNPC(const ANPCAIController* controller);
 	UFUNCTION()
 	void OnPreviousNPC(const ANPCAIController* controller);
-
+	UFUNCTION()
+	void OnLogState(const ANPCAIController* controller, const FString& state);
+	
 private:
 	void BindToDelegate();
 
