@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace TLN
 {
@@ -13,6 +14,17 @@ namespace TLN
             STATE_ON_AIR = 4,
 			STATE_EAT = 5,
 			STATE_EXPLORE = 6
+        };
+        
+        static std::map<ChickenState, std::string> ChickenStateMap =
+        {
+        			{ ChickenState::STATE_IDLE, std::string("Idle") },
+        			{ ChickenState::STATE_WALKING, std::string("Walking") },
+					{ ChickenState::STATE_RUNNING, std::string("Running") },
+					{ ChickenState::STATE_JUMPING, std::string("Jumping") },
+					{ ChickenState::STATE_ON_AIR, std::string("OnAir") },
+					{ ChickenState::STATE_EAT, std::string("Eating") },
+					{ ChickenState::STATE_EXPLORE, std::string("Exploring") }
         };
 	};
 }

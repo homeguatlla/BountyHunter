@@ -17,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPreviousNPC, const ANPCAIController
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FLogPredicate, const ANPCAIController*, controller, int, type, const FString&, text);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLogClear, const ANPCAIController*, controller);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FLogState, const ANPCAIController*, controller, const FString&, state);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FLogState, const ANPCAIController*, controller, const TArray<FString>&, states);
 
 
 UCLASS(Blueprintable)

@@ -1,7 +1,6 @@
 #pragma once
 #include <NAI/include/goap/agent/IAgent.h>
-
-#include "NPCAgent.h"
+#include <BountyHunter/Agents/AI/NPCAgent.h>
 
 template<typename TStateID, class TContext>
 class NPCAgentDecorator : public NAI::Goap::IAgent

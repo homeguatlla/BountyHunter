@@ -92,10 +92,10 @@ void ADebugHUDController::OnPreviousNPC(const ANPCAIController* controller)
 	}
 }
 
-void ADebugHUDController::OnLogState(const ANPCAIController* controller, const FString& state)
+void ADebugHUDController::OnLogState(const ANPCAIController* controller, const TArray<FString>& states)
 {
 	if (mAgentDebugHUDWidget->GetClass()->ImplementsInterface(UAgentDebugHUD::StaticClass()))
 	{
-		IAgentDebugHUD::Execute_OnLogState(mAgentDebugHUDWidget, controller, state);
+		IAgentDebugHUD::Execute_OnLogState(mAgentDebugHUDWidget, controller, states);
 	}
 }

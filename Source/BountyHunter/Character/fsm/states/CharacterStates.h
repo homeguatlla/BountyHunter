@@ -19,4 +19,20 @@ namespace TLN
 		STATE_NEXT_NPC = 102,
 		STATE_PREVIOUS_NPC = 103
 	};
+
+	static std::map<CharacterState, std::string> CharacterStateMap =
+	{
+		{ CharacterState::STATE_IDLE, std::string("Idle") },
+		{ CharacterState::STATE_WALKING, std::string("Walking") },
+		{ CharacterState::STATE_RUNNING, std::string("Running") },
+		{ CharacterState::STATE_JUMPING, std::string("Jumping") },
+		{ CharacterState::STATE_ON_AIR, std::string("OnAir") },
+		{ CharacterState::STATE_IDLE_ABILITY, std::string("IdleAbility") },
+		{ CharacterState::STATE_CASTING, std::string("Casting") },
+		{ CharacterState::STATE_COOLDOWN, std::string("Cooldown") },
+		{ CharacterState::STATE_NORMAL, std::string("Normal") },
+		{ CharacterState::STATE_DEBUG, std::string("Debug") },
+		{ CharacterState::STATE_NEXT_NPC, std::string("NextNPC") },
+		{ CharacterState::STATE_PREVIOUS_NPC, std::string("PreviousNPC") }
+	};
 };

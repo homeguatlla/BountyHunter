@@ -13,6 +13,7 @@ public:
 	void AddMachine(std::shared_ptr<StatesMachineType> machine);
 	void Update(float elapsedTime);
 	TStateID GetCurrentStateID(unsigned int machineIndex) const;
+	void PerformActionOnEachCurrentState(std::function<void(std::shared_ptr<core::utils::FSM::IState<TStateID, TContext>> state)> action);
 
 private:
 	std::vector<std::shared_ptr<StatesMachineType>> mMachines;
@@ -41,4 +42,14 @@ TStateID StatesMachineController<TStateID, TContext>::GetCurrentStateID(unsigned
 	assert(machineIndex < mMachines.size());
 
 	return mMachines[machineIndex]->GetCurrentState()->GetID();
+}
+
+template <typename TStateID, class TContext>
+void StatesMachineController<TStateID, TContext>::PerformActionOnEachCurrentState(
+	std::function<void(std::shared_ptr<core::utils::FSM::IState<TStateID, TContext>> state)> action)
+{
+	for(auto&& machine : mMachines)
+	{
+		action(machine->GetCurrentState());
+	}
 }

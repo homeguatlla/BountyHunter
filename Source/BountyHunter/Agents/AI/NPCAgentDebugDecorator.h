@@ -9,6 +9,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "BountyHunter/Agents/FSM/Chicken/states/ChickenStates.h"
+
 
 enum class PredicateStateType
 {
@@ -141,9 +143,14 @@ void NPCAgentDebugDecorator<TStateID, TContext>::SendPredicatesData() const
 template<typename TStateID, class TContext>
 void NPCAgentDebugDecorator<TStateID, TContext>::SendStateData() const
 {
-	const auto state = mAgent->GetCurrentStateID(0);
-	//TODO tenemos que enviar varios estados, hay que crear un array y meter todos.
-	mEventDispatcher->OnLogState.Broadcast(mController, FString::FromInt(static_cast<int>(state)));
+	TArray<FString> statesNames;
+	mAgent->PerformActionOnEachCurrentState([&statesNames](std::shared_ptr<core::utils::FSM::IState<TStateID, TContext>> state)
+	{
+		const auto stateName = GetStateName<TStateID>(state->GetID());
+		statesNames.Add(utils::UtilsLibrary::ConvertToFString(stateName));
+	});
+	
+	mEventDispatcher->OnLogState.Broadcast(mController, statesNames);
 }
 
 template<typename TStateID, class TContext>
