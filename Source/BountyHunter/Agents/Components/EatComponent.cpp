@@ -15,15 +15,6 @@ mEatingTime{0.0f}
 	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
-void UEatComponent::Eat(uint8 amount)
-{
-	check(amount > 0);
-	
-	mAmount = amount;
-	//SetComponentTickEnabled(true);
-	mEatingTime = EatingSpeed;
-}
-
 // Called when the game starts
 void UEatComponent::BeginPlay()
 {
@@ -48,16 +39,25 @@ void UEatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	}
 }
 
+void UEatComponent::Eat(uint8 amount)
+{
+	check(amount > 0);
+	UE_LOG(LogTemp, Log, TEXT("[UEatComponent::Eat] %s is starting eating"), *GetOwner()->GetName());
+	mAmount = amount;
+	//SetComponentTickEnabled(true);
+	mEatingTime = EatingSpeed;
+}
+
 void UEatComponent::UpdateEating(float elapsedTime)
 {
 	mEatingTime -= elapsedTime;
-	//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating... %f"), mEatingTime);
+	UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] %s is eating... %f"), *GetOwner()->GetName(), mEatingTime);
 	if(mEatingTime <= 0.0f)
 	{
 		mAmount--;
 		AccumulatedTimeToStartHavingHungry += TimeWithoutHungryPerAmountEaten;
 		mEatingTime = mAmount <= 0 ? mEatingTime = 0.0f : mEatingTime = EatingSpeed;
-		//UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] Eating amount %f, %f"), AccumulatedTimeToStartHavingHungry, mEatingTime);
+		UE_LOG(LogTemp, Log, TEXT("[UEatComponent::UpdateEating] %s is finishing eating amount %f, %f"), *GetOwner()->GetName(), AccumulatedTimeToStartHavingHungry, mEatingTime);
 	}
 }
 

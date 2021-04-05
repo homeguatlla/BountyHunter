@@ -19,6 +19,13 @@ ABountyHunterGameMode::ABountyHunterGameMode()
 	{
 		HUDClass = MainHUDBPClass.Class;
 	}
+
+	// set default player controller class to our Blueprinted character
+	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerClassFinder(TEXT("/Game/Game/Blueprints/Character/BP_PlayerController"));
+	if(PlayerControllerClassFinder.Class != nullptr)
+	{
+		PlayerControllerClass = PlayerControllerClassFinder.Class;
+	}
 }
 
 void ABountyHunterGameMode::BeginPlay()

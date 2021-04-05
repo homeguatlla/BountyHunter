@@ -7,6 +7,7 @@ public class BountyHunter : ModuleRules
 	public BountyHunter(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		bUseRTTI = true;
 		
 		PublicDependencyModuleNames.AddRange(new string[] { 
 			"Core", 

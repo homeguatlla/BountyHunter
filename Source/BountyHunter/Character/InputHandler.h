@@ -7,6 +7,7 @@ namespace TLN
 	enum class InputAction
 	{
 		JUMP,
+		FIRE,
 		ABILITY1,
 		ABILITY2,
 		USE,

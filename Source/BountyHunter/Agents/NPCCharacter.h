@@ -41,7 +41,7 @@ TScriptInterface<IComponent> ANPCCharacter::GetComponent() const
 	return eatInterface->IsEating();
 	}*/
 	const auto component = FindComponentByClass<TComponent>();
-	check(component != nullptr && component->GetClass()->ImplementsInterface(UIComponent::StaticClass()));
+	//check(component != nullptr && component->GetClass()->ImplementsInterface(UIComponent::StaticClass()));
 
 	if(component)
 	{

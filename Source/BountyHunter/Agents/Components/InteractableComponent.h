@@ -18,4 +18,10 @@ public:
 	UInteractableComponent();
 
 	virtual std::shared_ptr<NAI::Goap::IStimulus> CreateStimulus() const { return nullptr; }
+	bool IsBeingUsed() const { return mIsBeingUsed; }
+	void Use() { mIsBeingUsed = true; }
+	void Drop() { mIsBeingUsed = false; }
+	
+private:
+	bool mIsBeingUsed;
 };

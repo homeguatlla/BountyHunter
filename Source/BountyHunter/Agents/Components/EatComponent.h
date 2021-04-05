@@ -21,6 +21,7 @@ public:
 	bool HasHungry() const override { return !IsEating() && AccumulatedTimeToStartHavingHungry <= MinAccumulatedTimeToBeFull; }
 	bool IsEating() const override { return mEatingTime > 0.0f; }	
 	void Eat(uint8 amount) override;
+	float GetMinDistanceToEat() const override { return MinDistanceToEat; }
 	
 	/** Time spends to eat one amount of food, in seconds */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
@@ -38,6 +39,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
 	float MinAccumulatedTimeToBeFull;
 
+	/** Min distance to start eating */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
+	float MinDistanceToEat;
+
 	protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -46,6 +51,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+	
 private:
 	void UpdateEating(float elapsedTime);
 	void UpdateHungry(float elapsedTime);

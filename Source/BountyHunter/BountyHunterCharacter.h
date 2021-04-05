@@ -6,23 +6,21 @@
 #include "GameFramework/Character.h"
 
 #include <NAI/include/utils/fsm/StatesMachine.h>
-
 #include <BountyHunter/Character/CharacterAttributes.h>
 #include <BountyHunter/Character/DA_CharacterAttributes.h>
 #include <BountyHunter/Character/fsm/CharacterContext.h>
-#include <BountyHunter/Character/fsm/states/CharacterStates.h>
 #include <BountyHunter/Character/ICharacter.h>
 #include <BountyHunter/Character/InputHandler.h>
 #include <BountyHunter/Character/AbilitiesToolBelt.h>
 #include <BountyHunter/Abilities/AbilitiesFactory.h>
-#include <BountyHunter/Debug/DebugData.h>
-
-#include "FSM/StatesMachineController.h"
 
 #include "BountyHunterCharacter.generated.h"
 
+namespace TLN
+{
+	class IBHPlayerController;
+}
 class UInputComponent;
-using TLN::ICharacter;
 class UDA_CharacterAbilities;
 
 DECLARE_DELEGATE_OneParam(FPressKeyDelegate, TLN::InputAction);
@@ -30,7 +28,7 @@ DECLARE_DELEGATE_OneParam(FReleaseKeyDelegate, TLN::InputAction);
 
 
 UCLASS(config=Game)
-class ABountyHunterCharacter : public ACharacter, public ICharacter
+class ABountyHunterCharacter : public ACharacter, public TLN::ICharacter
 {
 	GENERATED_BODY()
 
@@ -74,16 +72,7 @@ class ABountyHunterCharacter : public ACharacter, public ICharacter
 	//Abilities Tool belt
 	TLN::AbilitiesToolBelt mAbilitiesToolBelt;
 
-	//States machine to control character states
-	StatesMachineController<TLN::CharacterState, TLN::CharacterContext> mStatesMachineController;
-	std::shared_ptr<TLN::CharacterContext> mCharacterFSMContext;
-
-	//Holds last input
-	std::shared_ptr<TLN::InputHandler> mInputHandler;
-
 	std::shared_ptr<TLN::AbilitiesFactory> mAbilitiesFactory;
-
-	std::shared_ptr<DebugData> mDebugData;
 
 	bool mHasNotifiedData;
 	
@@ -94,13 +83,7 @@ protected:
 	virtual void BeginPlay();
 
 public:
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
+	
 
 	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
@@ -137,27 +120,6 @@ protected:
 	/** Fires a projectile. */
 	void OnFire();
 
-	/** Resets HMD orientation and position in VR. */
-	void OnResetVR();
-
-	/** Handles moving forward/backward */
-	void MoveForward(float Val);
-
-	/** Handles stafing movement, left and right */
-	void MoveRight(float Val);
-
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	/**
-	 * Called via input to turn look up/down at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void LookUpAtRate(float Rate);
-
 	void Tick(float DeltaSeconds) override;
 
 	//inherited from ICharacter
@@ -174,7 +136,8 @@ protected:
 	
 	void PressKey(TLN::InputAction action);
 	void ReleaseKey(TLN::InputAction action);
-	
+	const TLN::IBHPlayerController* GetPlayerController() const;
+		
 	struct TouchData
 	{
 		TouchData() { bIsPressed = false;Location=FVector::ZeroVector;}
@@ -187,22 +150,8 @@ protected:
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
-	
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	// End of APawn interface
-
-	/* 
-	 * Configures input for touchscreen devices if there is a valid touch interface for doing so 
-	 *
-	 * @param	InputComponent	The input component pointer to bind controls to
-	 * @returns true if touch controls were enabled.
-	 */
-	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
 
 private:
-	void CreateStatesMachine();
 	void FillUpCharacterAttributes();
 	void FillUpAbilitiesFactory();
 	void AddDefaultAbilitiesToTheAbilitiesToolChest();

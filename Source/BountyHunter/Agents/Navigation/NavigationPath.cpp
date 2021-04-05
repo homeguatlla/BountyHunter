@@ -13,7 +13,11 @@ bool NavigationPath::Empty() const
 
 bool NavigationPath::HasReachedPoint(int index, const glm::vec3& position, float precision) const
 {
-	const float distance = glm::distance(GetPoint(index), position);
+	const glm::vec3 positionXZ(position.x, position.y, 0.0f);
+	auto pathPointXZ = GetPoint(index);
+	pathPointXZ.z = 0.0f;
+	
+	const float distance = glm::distance(pathPointXZ, positionXZ);
 	return distance < precision;
 }
 

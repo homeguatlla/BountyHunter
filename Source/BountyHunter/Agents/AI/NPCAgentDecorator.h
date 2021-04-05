@@ -18,13 +18,15 @@ public:
 	std::string WhereIam() const override;
 	void OnNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
 	void OnUpdatePredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
+	void OnRemovePredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate) override;
 	const std::vector<std::shared_ptr<NAI::Goap::IGoal>>& GetGoals() const override;
 	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& GetPredicates() const override;
 	const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> TransformStimulusIntoPredicates(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const override;
+	std::vector<int> GetPredicatesIdsToRemove() const override;
+	
 	void AddSensoryThreshold(const std::string& stimulusClassName,
 		std::shared_ptr<NAI::Goap::IThreshold> threshold) override;
 	std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> GetSensoryThresholds() const override;
-	void RemovePredicate(int id) override;
 	void AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal) override;
 
 	bool IsEnabled() const { return mIsEnabled; }
@@ -95,6 +97,12 @@ void NPCAgentDecorator<TStateID, TContext>::OnUpdatePredicate(std::shared_ptr<NA
 	mAgent->OnUpdatePredicate(predicate);
 }
 
+template <typename TStateID, class TContext>
+void NPCAgentDecorator<TStateID, TContext>::OnRemovePredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate)
+{
+	mAgent->OnRemovePredicate(predicate);
+}
+
 template<typename TStateID, class TContext>
 const std::vector<std::shared_ptr<NAI::Goap::IGoal>>& NPCAgentDecorator<TStateID, TContext>::GetGoals() const
 {
@@ -114,6 +122,12 @@ const std::vector<std::shared_ptr<NAI::Goap::IPredicate>> NPCAgentDecorator<TSta
 	return mAgent->TransformStimulusIntoPredicates(memory);
 }
 
+template <typename TStateID, class TContext>
+std::vector<int> NPCAgentDecorator<TStateID, TContext>::GetPredicatesIdsToRemove() const
+{
+	return mAgent->GetPredicatesIdsToRemove();
+}
+
 template<typename TStateID, class TContext>
 void NPCAgentDecorator<TStateID, TContext>::AddSensoryThreshold(const std::string& stimulusClassName,
 	std::shared_ptr<NAI::Goap::IThreshold> threshold)
@@ -125,12 +139,6 @@ template<typename TStateID, class TContext>
 std::map<std::string, std::shared_ptr<NAI::Goap::IThreshold>> NPCAgentDecorator<TStateID, TContext>::GetSensoryThresholds() const
 {
 	return mAgent->GetSensoryThresholds();
-}
-
-template<typename TStateID, class TContext>
-void NPCAgentDecorator<TStateID, TContext>::RemovePredicate(int id)
-{
-	mAgent->RemovePredicate(id);
 }
 
 template<typename TStateID, class TContext>

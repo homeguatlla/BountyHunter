@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "utils/fsm/StatesMachine.h"
-
+#include <functional>
 
 template<typename TStateID, class TContext>
 class StatesMachineController

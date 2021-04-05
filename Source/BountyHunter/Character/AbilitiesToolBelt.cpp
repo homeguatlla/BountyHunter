@@ -66,7 +66,7 @@ namespace TLN
 
 	bool AbilitiesToolBelt::CanCast(InputAction action, int availableMana) const
 	{
-		auto ability = GetAbility(action);
+		const auto ability = GetAbility(action);
 		if (ability != nullptr)
 		{
 			return ability->CanCast(availableMana);

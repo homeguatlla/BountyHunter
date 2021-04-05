@@ -12,11 +12,12 @@
 #include <algorithm>
 
 #include "BountyHunter/Agents/Components/IEatComponent.h"
+#include "BountyHunter/Agents/Components/InteractableComponent.h"
 
-
-const float DISTANCE_TO_EAT = 100.0f; //Esto podría estar en el componente
-
-EatGoal::EatGoal(IIEatComponent* eatComponent) : mEatComponent { eatComponent }
+EatGoal::EatGoal(IIEatComponent* eatComponent) :
+mEatComponent { eatComponent },
+mHasFood {false},
+mShouldRemoveFoodPredicate {false}
 {
 }
 
@@ -28,6 +29,8 @@ void EatGoal::DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent)
 
 void EatGoal::DoReset(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
 {
+	mHasFood = false;
+	mShouldRemoveFoodPredicate = false;
 	AddActions();
 }
 
@@ -44,49 +47,51 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
 	{
 		return nullptr;	
 	}
-	
-	std::vector<std::shared_ptr<FoodStimulus>> foodStimulusList;
 
-	memory.PerformActionForEach(
-		[this, &foodStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
-		{
-			if(stimulus->GetClassName() == typeid(FoodStimulus).name())
-			{
-				const auto foodStimulus = std::static_pointer_cast<FoodStimulus>(stimulus);
-				if(foodStimulus->IsActorAlive())
-				{
-					foodStimulusList.push_back(foodStimulus);
-					return true;
-				}
-			}
-			return false;
-		});
-	if(foodStimulusList.empty())
+	const auto foodStimulus = FindFirstFoodStimulusAvailable(memory);
+
+	if(foodStimulus == nullptr)
 	{
+		if(mHasFood)
+		{
+			mShouldRemoveFoodPredicate = true;
+		}
 		return nullptr;
 	}
-	std::sort(foodStimulusList.begin(), foodStimulusList.end(),
-            [this](const std::shared_ptr<FoodStimulus>& a, const std::shared_ptr<FoodStimulus>& b)->bool
-            {
-                return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
-            });
-
-	const auto distance = glm::distance(foodStimulusList[0]->GetPosition(), mAgent->GetPosition());
+	
+	const auto distance = glm::distance(foodStimulus->GetPosition(), mAgent->GetPosition());
 
 	//UE_LOG(LogTemp, Log, TEXT("[EatGoal::DoTransformStimulusIntoPredicates] Stimulus id = %d distance = %f"), foodStimulusList[0]->GetId(), distance);
-						
-	if(distance < DISTANCE_TO_EAT)
+
+	mHasFood = true;
+	
+	if(distance < mEatComponent->GetMinDistanceToEat())
 	{
 		return std::make_shared<FoodPredicate>(
 	        FOOD_PREDICATE_ID,
-	        foodStimulusList[0]->GetPosition(),
-	        foodStimulusList[0]->GetAmount(),
-	        foodStimulusList[0]->GetActor());
+	        foodStimulus->GetPosition(),
+	        foodStimulus->GetAmount(),
+	        foodStimulus->GetActor());
 	}
 	else
 	{
-		return std::make_shared<NAI::Goap::GoToPredicate>(GOTO_PREDICATE_ID, "GoTo", foodStimulusList[0]->GetPosition());
+		return std::make_shared<NAI::Goap::GoToPredicate>(GOTO_FOOD_PREDICATE_ID, "GoTo", foodStimulus->GetPosition());
 	}	
+}
+
+std::vector<int> EatGoal::DoGetPredicatesIdsToRemove() const
+{
+	if(mShouldRemoveFoodPredicate)
+	{
+		mShouldRemoveFoodPredicate = false;
+		mHasFood = false;
+		//We can be more specific here but it's ok. Instead of remove both predicates(could be possible only one of both remains in
+		//the predicates list) we could remove only the one it's still present.
+		UE_LOG(LogTemp, Warning, TEXT("EatGoal::DoGetPredicatesIdsToRemove"));
+		return std::vector<int> {GOTO_FOOD_PREDICATE_ID, FOOD_PREDICATE_ID};
+	}
+	
+	return {};
 }
 
 void EatGoal::AddActions()
@@ -102,4 +107,55 @@ std::shared_ptr<NAI::Goap::IAction> EatGoal::CreateEatAction()
 
 	unsigned int cost = 0;
 	return std::make_shared<EatAction>(preConditions, postConditions, cost, mEatComponent);       
+}
+
+std::shared_ptr<FoodStimulus> EatGoal::FindFirstFoodStimulusAvailable(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const
+{
+	std::vector<std::shared_ptr<FoodStimulus>> foodStimulusList;
+	FillWithFoodStimulus(memory, foodStimulusList);
+
+	if(!foodStimulusList.empty())
+	{
+		int i = 0;
+		while( i < foodStimulusList.size())
+		{
+			const auto foodStimulus = foodStimulusList[i];
+			const auto actor = foodStimulus->GetActor();
+			if(actor.IsValid())
+			{
+				const auto interactableComponent = actor->FindComponentByClass<UInteractableComponent>();
+				if(interactableComponent && !interactableComponent->IsBeingUsed())
+				{
+					return foodStimulus;
+				}
+			}
+			++i;
+		}
+	}
+
+	return nullptr;
+}
+
+void EatGoal::FillWithFoodStimulus(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory, std::vector<std::shared_ptr<FoodStimulus>>& foodStimulusList) const
+{
+	memory.PerformActionForEach(
+        [this, &foodStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
+        {
+            if(stimulus->GetClassName() == typeid(FoodStimulus).name())
+            {
+                const auto foodStimulus = std::static_pointer_cast<FoodStimulus>(stimulus);
+                if(foodStimulus->IsActorAlive())
+                {
+                    foodStimulusList.push_back(foodStimulus);
+                    return true;
+                }
+            }
+            return false;
+        });
+
+	std::sort(foodStimulusList.begin(), foodStimulusList.end(),
+              [this](const std::shared_ptr<FoodStimulus>& a, const std::shared_ptr<FoodStimulus>& b)->bool
+              {
+                  return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
+              });
 }

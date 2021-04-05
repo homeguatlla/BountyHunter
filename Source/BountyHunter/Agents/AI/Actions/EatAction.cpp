@@ -2,6 +2,7 @@
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
 #include "BountyHunter/Agents/Components/IEatComponent.h"
+#include "BountyHunter/Agents/Components/InteractableComponent.h"
 #include "GameFramework/Actor.h"
 
 EatAction::EatAction(const std::vector<std::string>& preConditions,
@@ -22,8 +23,14 @@ void EatAction::DoProcess(float elapsedTime)
 		const auto foodPredicate = std::static_pointer_cast<FoodPredicate>(predicateMatch);
 		if(foodPredicate->IsActorAlive())
 		{
-			mEatComponent->Eat(foodPredicate->GetAmount());
-			UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] HasHungry"));
+			const auto actor = foodPredicate->GetActor();
+			auto interactableComponent = actor->FindComponentByClass<UInteractableComponent>();
+			if(interactableComponent != nullptr && !interactableComponent->IsBeingUsed())
+			{
+				mEatComponent->Eat(foodPredicate->GetAmount());
+				interactableComponent->Use();
+				UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] HasHungry"));
+			}
 		}
 	}
 	else if(!mEatComponent->IsEating())
@@ -31,9 +38,14 @@ void EatAction::DoProcess(float elapsedTime)
 		mHasAccomplished = true;
 		const auto predicateMatch = GetPredicateMatchedPreconditionWithText(FOOD_PREDICATE_NAME);
 		const auto foodPredicate = std::static_pointer_cast<FoodPredicate>(predicateMatch);
+
+		auto actor = foodPredicate->GetActor();
+		if(actor != nullptr && actor.IsValid())
+		{
+			actor->Destroy();
+			UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Food Actor destroyed"));
+		}
 		
-		foodPredicate->GetActor()->Destroy();
-		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Food Actor destroyed"));
 		UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] Not eating -> accomplished"));
 	}
 }
