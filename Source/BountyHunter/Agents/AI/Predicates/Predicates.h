@@ -9,9 +9,11 @@ const std::string EXPLORE_GOT_PATH_PREDICATE_NAME("ExploreGotPath");
 const std::string WAIT_PREDICATE_NAME("Wait");
 
 const int IM_HUNGRY_PREDICATE_ID = 100;
+
 const int FOOD_PREDICATE_ID = 200;
+
 const int GOTO_PREDICATE_ID = 300;
-const int GOTO_FOOD_PREDICATE_ID = 310;
+const int GOTO_FOOD_PREDICATE_ID = 301;
 
 const int EXPLORE_PREDICATE_ID = 310;
 const int EXPLORE_TO_PREDICATE_ID = 311;
