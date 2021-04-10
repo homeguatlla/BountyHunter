@@ -170,6 +170,11 @@ void NavigationPlanner::CalculateCostMatrix()
 {
 	auto currentNavigationSystem = UNavigationSystemV1::GetCurrent(mWorld);
 
+	if(mLocations.empty())
+	{
+		return;
+	}
+	
 	for (auto i = 0; i < mLocations.size() - 1; ++i)
 	{
 		for (auto j = i + 1; j < mLocations.size(); ++j)

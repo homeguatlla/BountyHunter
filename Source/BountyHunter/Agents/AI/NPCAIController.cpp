@@ -37,14 +37,14 @@ void ANPCAIController::Tick(float DeltaTime)
 
 	if(mAgent != nullptr)
 	{
-		UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick]"));
+		//UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick]"));
 		mAgent->Update(DeltaTime);
-		auto predicates = mAgent->GetPredicates();
+		/*auto predicates = mAgent->GetPredicates();
 		for(auto&& predicate : predicates)
 		{
 			UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick] %s"), *utils::UtilsLibrary::ConvertToFString(predicate->GetText()));
 		}
-		UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick]"));
+		UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick]"));*/
 	}
 }
 
