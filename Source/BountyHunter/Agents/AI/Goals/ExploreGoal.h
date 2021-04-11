@@ -37,7 +37,7 @@ protected:
 	std::shared_ptr<NAI::Goap::FollowPathAction> CreateFollowPathAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,
 		const std::shared_ptr<NAI::Navigation::INavigationPath>& navigationPath) const;
-	std::shared_ptr<WaitAction> CreateWaitAction(float waitingTimeBetweenLocations) const;
+	std::shared_ptr<WaitAction> CreateWaitAction(float maxWaitingTimeBetweenLocations, float minWaitingTimeBetweenLocations) const;
 	std::shared_ptr<NAI::Goap::FindPathToAction> CreateFindPathToAction(
 		const std::weak_ptr<NAI::Goap::IAgent>& agent,
 		const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner);

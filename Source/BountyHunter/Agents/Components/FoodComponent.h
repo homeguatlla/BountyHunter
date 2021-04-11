@@ -11,7 +11,6 @@
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BOUNTYHUNTER_API UFoodComponent : public UInteractableComponent
 {
-private:
 	GENERATED_BODY()
 
 public:

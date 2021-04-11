@@ -76,7 +76,7 @@ void ABountyHunterPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	//UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM:"));
+	UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM:"));
 	mStatesMachineController.Update(DeltaSeconds);
 	//UE_LOG(LogTemp, Log, TEXT("[TheLastKnightCharacter][Tick] Character FSM state: %d"), machine->GetCurrentState()->GetID());
 }
@@ -94,6 +94,7 @@ void ABountyHunterPlayerController::CreateStatesMachine()
 	
 	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::CHARACTER_MOVEMENT, mCharacterFSMContext)));
 	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::CHARACTER_ABILITY, mCharacterFSMContext)));
+	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::CHARACTER_SHOT, mCharacterFSMContext)));
 	mStatesMachineController.AddMachine(std::move(factory.CreateCharacter(FSMType::DEBUG, mCharacterFSMContext)));
 }
 

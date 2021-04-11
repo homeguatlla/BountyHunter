@@ -84,7 +84,10 @@ void ExploreGoal::OnNavigationPath(const std::string& placeName, const std::shar
 	if(!path->Empty())
 	{
 		mActions.push_back(CreateFollowPathAction(mAgent, path));
-		mActions.push_back(CreateWaitAction(mExploreComponent->GetWaitingTimeBetweenLocations()));
+		mActions.push_back(CreateWaitAction(
+			mExploreComponent->GetMaxWaitingTimeBetweenLocations(),
+			mExploreComponent->GetMinWaitingTimeBetweenLocations())
+		);
 	}
 	else
 	{
@@ -139,13 +142,13 @@ std::shared_ptr<NAI::Goap::FollowPathAction> ExploreGoal::CreateFollowPathAction
 	return action;
 }
 
-std::shared_ptr<WaitAction> ExploreGoal::CreateWaitAction(float waitingTimeBetweenLocations) const
+std::shared_ptr<WaitAction> ExploreGoal::CreateWaitAction(float maxWaitingTimeBetweenLocations, float minWaitingTimeBetweenLocations) const
 {
 	std::vector<std::string> preConditions;
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions;
 	preConditions.push_back(WAIT_PREDICATE_NAME);
 	
-	auto action = std::make_shared<WaitAction>(preConditions, postConditions, 0, waitingTimeBetweenLocations);
+	auto action = std::make_shared<WaitAction>(preConditions, postConditions, 0, maxWaitingTimeBetweenLocations, minWaitingTimeBetweenLocations);
 
 	return action;
 }

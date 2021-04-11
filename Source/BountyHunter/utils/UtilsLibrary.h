@@ -157,5 +157,9 @@ class UtilsLibrary
 
 			return center + glm::vec2(x, y);
 		}
+	static float GetRandomRange(float min, float max)
+		{
+			return min + std::rand() % static_cast<int>(max - min + 1);
+		}
 };
 }

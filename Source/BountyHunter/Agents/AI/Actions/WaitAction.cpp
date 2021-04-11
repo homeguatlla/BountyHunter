@@ -1,12 +1,16 @@
 ﻿#include "WaitAction.h"
 
+#include "BountyHunter/utils/UtilsLibrary.h"
+
 WaitAction::WaitAction(const std::vector<std::string>& preConditions,
-                     const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& postConditions,
-                     unsigned int cost, float time) :
+                       const std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& postConditions,
+                       unsigned int cost, float maxWaitingTime, float minWaitingTime) :
 BaseAction(preConditions, postConditions, cost),
-mTimeToWait{time}
+mMaxWaitingTime { maxWaitingTime },
+mMinWaitingTime { minWaitingTime }
 {
 	mHasAccomplished = false;
+	mTimeToWait = utils::UtilsLibrary::GetRandomRange(minWaitingTime, maxWaitingTime);
 }
 
 void WaitAction::DoProcess(float elapsedTime)

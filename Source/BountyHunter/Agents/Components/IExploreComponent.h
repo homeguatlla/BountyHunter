@@ -24,5 +24,8 @@ public:
     virtual float GetExplorationRadius() const = 0;
 	
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
-    virtual float GetWaitingTimeBetweenLocations() const = 0;
+    virtual float GetMaxWaitingTimeBetweenLocations() const = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Explore Component")
+    virtual float GetMinWaitingTimeBetweenLocations() const = 0;
 };

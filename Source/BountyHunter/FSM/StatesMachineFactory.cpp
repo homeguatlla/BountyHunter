@@ -20,6 +20,14 @@
 #include <BountyHunter/Character/fsm/transitions/abilities/EnterIdleAbility.h>
 #include <BountyHunter/Character/fsm/transitions/abilities/EnterCooldown.h>
 
+#include <BountyHunter/Character/fsm/states/shot/IdleShot.h>
+#include <BountyHunter/Character/fsm/states/shot/Fire.h>
+#include <BountyHunter/Character/fsm/states/shot/CooldownShot.h>
+
+#include <BountyHunter/Character/fsm/transitions/shot/EnterIdleShot.h>
+#include <BountyHunter/Character/fsm/transitions/shot/EnterFire.h>
+#include <BountyHunter/Character/fsm/transitions/shot/EnterCooldownShot.h>
+
 //FSM debug
 #include <BountyHunter/Character/fsm/transitions/debug/EnterNormal.h>
 #include <BountyHunter/Character/fsm/transitions/debug/EnterDebug.h>
@@ -36,13 +44,13 @@
 
 //Chicken FSM state
 #include <BountyHunter/Agents/FSM/Chicken/states/state/Eat.h>
-#include "BountyHunter/Agents/FSM/Chicken/states/state/Explore.h"
-#include "BountyHunter/Agents/FSM/Chicken/states/state/IdleState.h"
+#include <BountyHunter/Agents/FSM/Chicken/states/state/Explore.h>
+#include <BountyHunter/Agents/FSM/Chicken/states/state/IdleState.h>
 
 #include <BountyHunter/Agents/FSM/Chicken/transitions/state/EnterEat.h>
 #include <BountyHunter/Agents/FSM/Chicken/transitions/state/LeaveEat.h>
-#include "BountyHunter/Agents/FSM/Chicken/transitions/state/EnterExplore.h"
-#include "BountyHunter/Agents/FSM/Chicken/transitions/state/LeaveExplore.h"
+#include <BountyHunter/Agents/FSM/Chicken/transitions/state/EnterExplore.h>
+#include <BountyHunter/Agents/FSM/Chicken/transitions/state/LeaveExplore.h>
 
 #include "StatesMachineBuilder.h"
 
@@ -80,6 +88,21 @@ namespace TLN
                               .WithTransition(std::make_unique<TLN::EnterIdleAbility>(cooldown, idle))
                               .WithInitialState(idle->GetID())
                               .Build(context);
+			}
+		case FSMType::CHARACTER_SHOT:
+			{
+				auto idle = std::make_shared<TLN::IdleShot>();
+				auto fire = std::make_shared<TLN::Fire>();
+				auto cooldown = std::make_shared<TLN::CooldownShot>();
+
+				return builder.WithState(idle)
+							  .WithState(fire)
+							  .WithState(cooldown)
+							  .WithTransition(std::make_unique<TLN::EnterFire>(idle, fire))
+							  .WithTransition(std::make_unique<TLN::EnterCooldownShot>(fire, cooldown))
+							  .WithTransition(std::make_unique<TLN::EnterIdleShot>(cooldown, idle))
+							  .WithInitialState(idle->GetID())
+							  .Build(context);
 			}
 		case FSMType::DEBUG:
 			{

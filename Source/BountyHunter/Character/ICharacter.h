@@ -17,6 +17,10 @@ namespace TLN
 			virtual bool IsReadyToCast() const = 0;
 			virtual std::shared_ptr<TLN::IAbility> Cast() = 0;
 
+			virtual bool CanFire() const = 0;
+			virtual bool IsReadyToFire() const = 0;
+			virtual void Fire() = 0;
+		
 			virtual void PlayCastingAnimation() = 0;
 			virtual void StopCastingAnimation() = 0;
 

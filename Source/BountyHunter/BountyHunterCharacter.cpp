@@ -175,6 +175,11 @@ bool ABountyHunterCharacter::IsReadyToCast() const
 	return mAbilitiesToolBelt.IsReadyToCast();
 }
 
+bool ABountyHunterCharacter::IsReadyToFire() const
+{
+	return true;
+}
+
 void ABountyHunterCharacter::PlayCastingAnimation()
 {
 	IsCastingOneHeight = true;
@@ -224,6 +229,16 @@ std::shared_ptr<IAbility> ABountyHunterCharacter::Cast()
 	}
 
 	return ability;
+}
+
+bool ABountyHunterCharacter::CanFire() const
+{
+	return true;
+}
+
+void ABountyHunterCharacter::Fire()
+{
+	OnFire();
 }
 
 void ABountyHunterCharacter::FillUpCharacterAttributes()

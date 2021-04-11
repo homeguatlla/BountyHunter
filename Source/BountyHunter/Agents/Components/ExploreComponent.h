@@ -21,15 +21,20 @@ public:
 	void SetExplore(bool isExploring) override { mIsExploring = isExploring; }
 	bool IsExploring() const override;
 	float GetExplorationRadius() const override { return Radius; }
-	float GetWaitingTimeBetweenLocations() const override { return WaitingTimeBetweenLocations; }
+	float GetMaxWaitingTimeBetweenLocations() const override { return MaxWaitingTimeBetweenLocations; }
+	float GetMinWaitingTimeBetweenLocations() const override { return MinWaitingTimeBetweenLocations; }
 
 	/** Radius of exploration from Pawn Position */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
 	float Radius;
 
-	/** Time in seconds before explore a new location */
+	/** Max time in seconds before explore a new location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
-	float WaitingTimeBetweenLocations;
+	float MaxWaitingTimeBetweenLocations;
+
+	/** Min time in seconds before explore a new location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
+	float MinWaitingTimeBetweenLocations;
 	
 protected:
 	// Called when the game starts

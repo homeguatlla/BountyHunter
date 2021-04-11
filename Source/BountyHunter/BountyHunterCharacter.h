@@ -127,12 +127,16 @@ protected:
 	bool IsIdle() const override;
 	bool IsCasting() const override;
 	bool IsReadyToCast() const override;
-
+	bool IsReadyToFire() const override;
+	
 	void PlayCastingAnimation() override;
 	void StopCastingAnimation() override;
 
 	bool CanCast(TLN::InputAction action) const override;
 	std::shared_ptr<TLN::IAbility> Cast() override;
+
+	bool CanFire() const override;
+	void Fire() override;
 	
 	void PressKey(TLN::InputAction action);
 	void ReleaseKey(TLN::InputAction action);
