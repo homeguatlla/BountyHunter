@@ -25,15 +25,15 @@ public:
 	float GetMinWaitingTimeBetweenLocations() const override { return MinWaitingTimeBetweenLocations; }
 
 	/** Radius of exploration from Pawn Position */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explore Attributes")
 	float Radius;
 
 	/** Max time in seconds before explore a new location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explore Attributes")
 	float MaxWaitingTimeBetweenLocations;
 
 	/** Min time in seconds before explore a new location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Esplore Attributes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Explore Attributes")
 	float MinWaitingTimeBetweenLocations;
 	
 protected:
