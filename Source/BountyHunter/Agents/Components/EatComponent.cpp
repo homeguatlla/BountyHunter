@@ -48,6 +48,11 @@ void UEatComponent::Eat(uint8 amount)
 	mEatingTime = EatingSpeed;
 }
 
+void UEatComponent::Cancel()
+{
+	mEatingTime = 0.0f;
+}
+
 void UEatComponent::UpdateEating(float elapsedTime)
 {
 	mEatingTime -= elapsedTime;

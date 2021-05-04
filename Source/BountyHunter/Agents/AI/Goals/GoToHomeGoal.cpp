@@ -15,13 +15,17 @@
 #include <goap/sensory/IStimulus.h>
 #include <glm/gtx/string_cast.hpp>
 
+#include "BountyHunter/Stimulus/SoundStimulus.h"
+#include "goap/BasePredicate.h"
+
 
 GoToHomeGoal::GoToHomeGoal(IIHomeComponent* homeComponent,
                            const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner,
                            float precision) :
 mHomeComponent { homeComponent },
 mNavigationPlanner{navigationPlanner},
-mPrecision{precision}
+mPrecision{precision},
+mLastReactedSoundId {0}
 {
 }
 
@@ -51,6 +55,29 @@ void GoToHomeGoal::DoAccomplished(std::vector<std::shared_ptr<NAI::Goap::IPredic
 std::shared_ptr<NAI::Goap::IPredicate> GoToHomeGoal::DoTransformStimulusIntoPredicates(
 	const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const
 {
+	std::vector<std::shared_ptr<SoundStimulus>> orderedSoundStimulusList;
+
+	FillWithOrderedSoundStimulus(memory, orderedSoundStimulusList);
+
+	//TODO con la lista de sonidos ya podríamos saber si hay alguno peligroso
+	//y entonces activar ir a home. En realidad esto lo haremos através del
+	//escapeGoal. Este decidirá si hay que huir a home o no. Para probar, lo ponemos
+	//aquí.
+	
+	if(orderedSoundStimulusList.empty())
+	{
+		return nullptr;
+	}
+
+	for(auto&& soundStimulus : orderedSoundStimulusList)
+	{
+		if(mLastReactedSoundId < soundStimulus->GetId())
+		{
+			mLastReactedSoundId = soundStimulus->GetId();
+			return std::make_shared<NAI::Goap::BasePredicate>(GO_HOME_PREDICATE_ID, GO_HOME_PREDICATE_NAME);
+		}
+	}
+	
 	return nullptr;
 }
 
@@ -68,7 +95,8 @@ void GoToHomeGoal::AddActions()
 void GoToHomeGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) const
 {
 	NAI::Goap::Utils::RemovePredicateWith(predicates, NAI::Goap::PLACE_IAM_PREDICATE_NAME);
-	NAI::Goap::Utils::RemovePredicateWith(predicates, WAIT_PREDICATE_NAME);
+	NAI::Goap::Utils::RemovePredicateWith(predicates, GO_HOME_PREDICATE_NAME);
+	NAI::Goap::Utils::RemovePredicateWith(predicates, HOME_PATH_PREDICATE_NAME);
 }
 
 void GoToHomeGoal::OnNavigationPath(const std::string& placeName, const std::shared_ptr<NAI::Navigation::INavigationPath>& path)
@@ -90,9 +118,33 @@ glm::vec3 GoToHomeGoal::GetDestination(const std::shared_ptr<NAI::Goap::IPredica
 		utils::UtilsLibrary::ConvertToString(mHomeComponent->GetHomeName()),
 		destination);
 
-	check(!hasDestination);
+	check(hasDestination);
 	
 	return destination;
+}
+
+void GoToHomeGoal::FillWithOrderedSoundStimulus(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory, std::vector<std::shared_ptr<SoundStimulus>>& soundStimulusList) const
+{
+	memory.PerformActionForEach(
+        [this, &soundStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
+        {
+            if(stimulus->GetClassName() == typeid(SoundStimulus).name())
+            {
+                const auto soundStimulus = std::static_pointer_cast<SoundStimulus>(stimulus);
+            	//TODO mirar la categoría del sonido para saber si es peligroso o no por ejemplo.
+            	//El SoundThreshold igual debería determinar la categoría.
+                soundStimulusList.push_back(soundStimulus);
+                return true;
+            }
+            return false;
+        });
+
+	std::sort(soundStimulusList.begin(), soundStimulusList.end(),
+              [this](const std::shared_ptr<SoundStimulus>& a, const std::shared_ptr<SoundStimulus>& b)->bool
+              {
+                  //return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
+              	return a->GetId() < b->GetId();
+              });
 }
 
 std::shared_ptr<NAI::Goap::FindPathToAction> GoToHomeGoal::CreateFindPathToAction(const std::weak_ptr<NAI::Goap::IAgent>& agent, const std::shared_ptr<NAI::Navigation::INavigationPlanner>& navigationPlanner)

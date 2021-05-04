@@ -22,4 +22,6 @@ public:
 	virtual void Eat(uint8 amount) = 0;
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Eat Component")
     virtual float GetMinDistanceToEat() const = 0;
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Eat Component")
+	virtual void Cancel() = 0;
 };

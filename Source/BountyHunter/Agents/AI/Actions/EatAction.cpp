@@ -24,11 +24,11 @@ void EatAction::DoProcess(float elapsedTime)
 		if(foodPredicate->IsActorAlive())
 		{
 			const auto actor = foodPredicate->GetActor();
-			auto interactableComponent = actor->FindComponentByClass<UInteractableComponent>();
-			if(interactableComponent != nullptr && !interactableComponent->IsBeingUsed())
+			auto interactComponent = actor->FindComponentByClass<UInteractableComponent>();
+			if(interactComponent != nullptr && !interactComponent->IsBeingUsed())
 			{
 				mEatComponent->Eat(foodPredicate->GetAmount());
-				interactableComponent->Use();
+				interactComponent->Use();
 				UE_LOG(LogTemp, Log, TEXT("[EatAction::DoProcess] HasHungry"));
 			}
 		}

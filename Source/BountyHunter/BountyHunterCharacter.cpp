@@ -4,7 +4,7 @@
 #include "BountyHunterProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
-
+#include "BountyHunterGameInstance.h"
 
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -13,7 +13,6 @@
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/Pawn.h"
 
-#include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 
@@ -29,6 +28,8 @@
 
 #include <memory>
 #include <cassert>
+
+#include "BountyHunterGameInstance.h"
 
 
 using namespace TLN;
@@ -313,7 +314,9 @@ void ABountyHunterCharacter::OnFire()
 	// try and play the sound if specified
 	if (FireSound != NULL)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+		const auto gameInstance = GetGameInstance<UBountyHunterGameInstance>();
+		check(gameInstance);
+		gameInstance->GetSoundPlayer()->PlaySound(this, FireSound, GetActorLocation());
 	}
 
 	// try and play a firing animation if specified

@@ -22,6 +22,7 @@ public:
 	bool IsEating() const override { return mEatingTime > 0.0f; }	
 	void Eat(uint8 amount) override;
 	float GetMinDistanceToEat() const override { return MinDistanceToEat; }
+	void Cancel() override;
 	
 	/** Time spends to eat one amount of food, in seconds */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")

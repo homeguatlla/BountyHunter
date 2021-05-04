@@ -104,21 +104,25 @@ unsigned int NavigationPlanner::GetAproxCost(const glm::vec3& origin, const glm:
 	auto location1 = FindLocationNearest(origin);
 	auto location2 = FindLocationNearest(destination);
 
+	unsigned int cost = 0;
+	
 	if (location1.name != location2.name)
 	{
 		const auto key = std::pair<std::string, std::string>(location1.name, location2.name);
 		const auto it = mCostMatrix.find(key);
 		if(it != mCostMatrix.end())
 		{
-			return it->second;
+			cost = it->second;
 		}
 		else 
 		{
-			return std::numeric_limits<unsigned int>::max();
+			cost =  std::numeric_limits<unsigned int>::max();
 		}
 	}
+	
+	cost = glm::distance(origin, destination);
 
-	return 0;
+	return cost;
 }
 
 bool NavigationPlanner::GetRandomReachablePointInRadius(const glm::vec3& from, float radius, glm::vec3& reachableLocation) const
@@ -144,7 +148,14 @@ std::string NavigationPlanner::GetLocationNameGivenAWayPoint(AActor* wayPoint) c
 	const FString locationName = wayPoint->GetName();
 	int32 index;
 	locationName.FindChar('_', index);
-	return std::string(TCHAR_TO_UTF8(*locationName.Left(index)));
+	if(index > 0)
+	{
+		return utils::UtilsLibrary::ConvertToString(locationName.Left(index));
+	}
+	else
+	{
+		return utils::UtilsLibrary::ConvertToString(locationName);
+	}
 }
 
 NavigationPlanner::Location NavigationPlanner::FindLocationNearest(const glm::vec3& point) const

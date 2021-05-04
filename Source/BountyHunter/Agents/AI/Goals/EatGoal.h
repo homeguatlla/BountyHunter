@@ -14,7 +14,9 @@ class EatGoal : public NAI::Goap::BaseGoal
 public:
 	EatGoal(IIEatComponent* eatComponent);
 	virtual ~EatGoal() = default;
-
+	unsigned GetCost() const override { return 10; } //TODO maybe 
+	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates) const override { return 10; }	
+	
 protected:
 	void DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent) override;
 	void DoReset(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) override;
@@ -23,6 +25,8 @@ protected:
 	std::shared_ptr<NAI::Goap::IPredicate> DoTransformStimulusIntoPredicates(
 		const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const override;
 	std::vector<int> DoGetPredicatesIdsToRemove() const override;
+
+	void DoCancel(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates) override;
 	
 	void AddActions();
 	std::shared_ptr<NAI::Goap::IAction> CreateEatAction();

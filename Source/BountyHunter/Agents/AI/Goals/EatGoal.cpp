@@ -94,6 +94,11 @@ std::vector<int> EatGoal::DoGetPredicatesIdsToRemove() const
 	return {};
 }
 
+void EatGoal::DoCancel(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& predicates)
+{
+	mEatComponent->Cancel();
+}
+
 void EatGoal::AddActions()
 {
 	auto action = CreateEatAction();

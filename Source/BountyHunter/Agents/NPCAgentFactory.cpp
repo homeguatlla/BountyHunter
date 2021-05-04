@@ -19,6 +19,8 @@
 #include "BountyHunter/Character/fsm/CharacterContext.h"
 #include "BountyHunter/Character/fsm/states/CharacterStates.h"
 #include "BountyHunter/FSM/StatesMachineFactory.h"
+#include "BountyHunter/Stimulus/SoundStimulus.h"
+#include "BountyHunter/Thresholds/SoundThreshold.h"
 #include "Components/EatComponent.h"
 #include "FSM/Chicken/ChickenContext.h"
 #include "FSM/Chicken/states/ChickenStates.h"
@@ -91,6 +93,7 @@ namespace TLN
 						.WithPredicate(std::make_shared<NAI::Goap::BasePredicate>(EXPLORE_PREDICATE_ID, EXPLORE_PREDICATE_NAME))
                         .WithPerceptionSystem(sensorySystem)
                         .WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
+						.WithSensoryThreshold(typeid(SoundStimulus).name(), std::make_shared<SoundThreshold>())
                         .WithStatesMachine(
                             fsmFactory.CreateChicken(
                                 FSMType::CHICKEN_MOVEMENT,
