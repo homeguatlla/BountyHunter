@@ -44,7 +44,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Eat Attributes")
 	float MinDistanceToEat;
 
-	protected:
+protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

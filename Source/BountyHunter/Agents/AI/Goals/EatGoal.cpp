@@ -12,7 +12,7 @@
 #include <algorithm>
 
 #include "BountyHunter/Agents/Components/IEatComponent.h"
-#include "BountyHunter/Agents/Components/InteractableComponent.h"
+#include "BountyHunter/Agents/Components/InteractiveComponent.h"
 
 EatGoal::EatGoal(IIEatComponent* eatComponent) :
 mEatComponent { eatComponent },
@@ -128,7 +128,7 @@ std::shared_ptr<FoodStimulus> EatGoal::FindFirstFoodStimulusAvailable(const NAI:
 			const auto actor = foodStimulus->GetActor();
 			if(actor.IsValid())
 			{
-				const auto interactableComponent = actor->FindComponentByClass<UInteractableComponent>();
+				const auto interactableComponent = actor->FindComponentByClass<UInteractiveComponent>();
 				if(interactableComponent && !interactableComponent->IsBeingUsed())
 				{
 					return foodStimulus;

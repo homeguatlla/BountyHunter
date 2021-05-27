@@ -1,5 +1,5 @@
 ﻿#include "SensorSoundListenerComponent.h"
-#include "InteractableComponent.h"
+#include "InteractiveComponent.h"
 
 #include <BountyHunter/utils/UtilsLibrary.h>
 #include <BountyHunter/Agents/AI/NPCAIController.h>

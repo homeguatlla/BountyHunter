@@ -15,7 +15,6 @@ mEatingTime{0.0f}
 	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
-// Called when the game starts
 void UEatComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -24,7 +23,6 @@ void UEatComponent::BeginPlay()
 	controller->AddNewGoal(std::make_shared<EatGoal>(this));
 }
 
-// Called every frame
 void UEatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

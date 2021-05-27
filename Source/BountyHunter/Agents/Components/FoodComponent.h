@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 
-#include "InteractableComponent.h"
+#include "InteractiveComponent.h"
 #include "FoodComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UFoodComponent : public UInteractableComponent
+class BOUNTYHUNTER_API UFoodComponent : public UInteractiveComponent
 {
 	GENERATED_BODY()
 

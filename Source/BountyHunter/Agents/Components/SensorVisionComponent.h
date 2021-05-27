@@ -50,6 +50,20 @@ public:
 private:
 	FVector GetActorHeadLocation() const { return mActorHeadLocation; }
 	void UpdateActorHeadLocationAndRotation();
+
+	template<typename ComponentType>
+	bool CheckIfIs(const AActor& actor) const
+	{
+		const auto component = actor.FindComponentByClass<ComponentType>();
+		if(component != nullptr)
+		{
+			mSensor->NotifyAll(component->CreateStimulus());
+			return true;
+		}
+
+		return false;
+	}
+	
 	void DrawDebugLines(const FVector& head, const FVector& pointOfSight, const FVector& forward) const;
 
 	std::shared_ptr<NAI::Goap::BaseSensor> mSensor;

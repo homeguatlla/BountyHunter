@@ -1,7 +1,7 @@
 ﻿#include "SensorVisionComponent.h"
 
 #include "DrawDebugHelpers.h"
-#include "InteractableComponent.h"
+#include "InteractiveComponent.h"
 #include "Engine/Engine.h"
 #include "GameFramework/Character.h"
 
@@ -10,6 +10,8 @@
 #include <BountyHunter/Agents/AI/NPCAIController.h>
 
 #include <goap/sensory/BaseSensor.h>
+
+#include "DangerousComponent.h"
 
 using namespace utils;
 
@@ -26,7 +28,7 @@ void USensorVisionComponent::BeginPlay()
 }
 
 void USensorVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                     FActorComponentTickFunction* ThisTickFunction)
+                                           FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -54,19 +56,16 @@ void USensorVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		if (GEngine) 
 		{
-			const auto interactableComponent = hit.Actor->FindComponentByClass<UInteractableComponent>();
-			if(interactableComponent != nullptr)
+			bool stimulusCreated = false;
+			
+			stimulusCreated = CheckIfIs<UInteractiveComponent>(*hit.Actor);
+			stimulusCreated |= CheckIfIs<UDangerousComponent>(*hit.Actor);
+			
+			if(IsDebug && stimulusCreated)
 			{
-				const auto stimulus = interactableComponent->CreateStimulus();
-				mSensor->NotifyAll(stimulus);
-				//UE_LOG(LogTemp, Log, TEXT("[UVisionComponent::TickComponent] Food detected"));
-	
-				if(IsDebug)
-				{
-					auto name = hit.Actor->GetName();
-					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Hit Result: %s"), *name));
-					DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, FColor::Red, false);
-				}
+				auto name = hit.Actor->GetName();
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Hit Result: %s"), *name));
+				DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, FColor::Red, false);
 			}
 		}			
 	}

@@ -2,7 +2,7 @@
 #include "BountyHunter/Agents/AI/Predicates/FoodPredicate.h"
 #include "BountyHunter/Agents/AI/Predicates/Predicates.h"
 #include "BountyHunter/Agents/Components/IEatComponent.h"
-#include "BountyHunter/Agents/Components/InteractableComponent.h"
+#include "BountyHunter/Agents/Components/InteractiveComponent.h"
 #include "GameFramework/Actor.h"
 
 EatAction::EatAction(const std::vector<std::string>& preConditions,
@@ -24,7 +24,7 @@ void EatAction::DoProcess(float elapsedTime)
 		if(foodPredicate->IsActorAlive())
 		{
 			const auto actor = foodPredicate->GetActor();
-			auto interactComponent = actor->FindComponentByClass<UInteractableComponent>();
+			auto interactComponent = actor->FindComponentByClass<UInteractiveComponent>();
 			if(interactComponent != nullptr && !interactComponent->IsBeingUsed())
 			{
 				mEatComponent->Eat(foodPredicate->GetAmount());

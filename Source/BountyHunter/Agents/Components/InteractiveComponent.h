@@ -6,16 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "goap/sensory/IStimulus.h"
 #include <memory>
-#include "InteractableComponent.generated.h"
+#include "InteractiveComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOUNTYHUNTER_API UInteractableComponent : public UActorComponent
+class BOUNTYHUNTER_API UInteractiveComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	UInteractableComponent();
+	UInteractiveComponent();
 
 	virtual std::shared_ptr<NAI::Goap::IStimulus> CreateStimulus() const { return nullptr; }
 	bool IsBeingUsed() const { return mIsBeingUsed; }

@@ -266,7 +266,7 @@ void ABountyHunterCharacter::FillUpAbilitiesFactory()
 			return HealthAbility::Create(ability, abilityDA, mAttributes);
 		}
 	);
-}
+} 
 
 void ABountyHunterCharacter::AddDefaultAbilitiesToTheAbilitiesToolChest()
 {
