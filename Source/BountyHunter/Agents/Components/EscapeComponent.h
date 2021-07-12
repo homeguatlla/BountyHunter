@@ -14,8 +14,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual bool IsEscaping() const override;
+	virtual bool IsEscaping() const override { return mIsEscaping; }
+	virtual void SetEscaping(bool isEscaping) override { mIsEscaping = isEscaping; }
+	
+protected:
+	virtual void BeginPlay() override;
 
-	protected:
-	virtual void BeginPlay() override;	
+private:
+	bool mIsEscaping;
 };

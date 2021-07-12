@@ -17,4 +17,6 @@ class IIEscapeComponent
 public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Escape Component")
 	virtual bool IsEscaping() const = 0;
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "Escape Component")
+	virtual void SetEscaping(bool isEscaping) = 0;
 };

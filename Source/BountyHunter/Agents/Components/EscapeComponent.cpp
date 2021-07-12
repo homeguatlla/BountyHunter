@@ -22,9 +22,3 @@ void UEscapeComponent::BeginPlay()
 void UEscapeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 }
-
-bool UEscapeComponent::IsEscaping() const
-{
-	return false;
-}
-

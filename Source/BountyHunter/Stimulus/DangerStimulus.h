@@ -1,7 +1,8 @@
-﻿
+﻿#pragma once
+
 #include "goap/sensory/IStimulus.h"
 
-class DangerStimulus :  public NAI::Goap::IStimulus
+class DangerStimulus : public NAI::Goap::IStimulus
 {
 public:
 	DangerStimulus(int id, const glm::vec3& position, AActor* actor);

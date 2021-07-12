@@ -32,12 +32,6 @@ protected:
 	std::shared_ptr<NAI::Goap::IAction> CreateEatAction();
 
 private:
-	std::shared_ptr<FoodStimulus> FindFirstFoodStimulusAvailable(
-		const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const;
-	void FillWithFoodStimulus(
-		const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory,
-		std::vector<std::shared_ptr<FoodStimulus>>& foodStimulusList) const;
-
 	std::shared_ptr<NAI::Goap::IAgent> mAgent;
 	IIEatComponent* mEatComponent;
 	mutable bool mHasFood;

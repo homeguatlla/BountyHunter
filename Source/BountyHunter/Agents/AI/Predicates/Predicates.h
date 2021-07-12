@@ -10,6 +10,7 @@ const std::string WAIT_PREDICATE_NAME("Wait");
 const std::string GO_HOME_PREDICATE_NAME("GoHome");
 const std::string HOME_PATH_PREDICATE_NAME("HomePath");
 const std::string ESCAPE_PREDICATE_NAME("Escape");
+const std::string FIND_ESCAPE_PLACE_PREDICATE_NAME("FindEscapePlace");
 
 const int IM_HUNGRY_PREDICATE_ID = 100;
 
@@ -26,6 +27,7 @@ const int GO_HOME_PREDICATE_ID = 320;
 const int HOME_PATH_PREDICATE_ID = 321;
 
 const int ESCAPE_PREDICATE_ID = 330;
+const int FIND_ESCAPE_PLACE_PREDICATE_ID = 331;
 
 const int WAIT_PREDICATE_ID = 400;
 

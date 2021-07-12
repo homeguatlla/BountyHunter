@@ -9,10 +9,9 @@
 #include <goap/GoapUtils.h>
 #include <goap/IAction.h>
 #include <goap/sensory/IStimulus.h>
-#include <algorithm>
 
 #include "BountyHunter/Agents/Components/IEatComponent.h"
-#include "BountyHunter/Agents/Components/InteractiveComponent.h"
+#include "BountyHunter/utils/UtilsLibrary.h"
 
 EatGoal::EatGoal(IIEatComponent* eatComponent) :
 mEatComponent { eatComponent },
@@ -48,7 +47,7 @@ std::shared_ptr<NAI::Goap::IPredicate> EatGoal::DoTransformStimulusIntoPredicate
 		return nullptr;	
 	}
 
-	const auto foodStimulus = FindFirstFoodStimulusAvailable(memory);
+	const auto foodStimulus = utils::UtilsLibrary::FindFirstStimulusAvailable<FoodStimulus>(memory, mAgent->GetPosition());
 
 	if(foodStimulus == nullptr)
 	{
@@ -101,7 +100,7 @@ void EatGoal::DoCancel(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& pred
 
 void EatGoal::AddActions()
 {
-	auto action = CreateEatAction();
+	const auto action = CreateEatAction();
 	mActions.push_back(action);
 }
 
@@ -112,55 +111,4 @@ std::shared_ptr<NAI::Goap::IAction> EatGoal::CreateEatAction()
 
 	unsigned int cost = 0;
 	return std::make_shared<EatAction>(preConditions, postConditions, cost, mEatComponent);       
-}
-
-std::shared_ptr<FoodStimulus> EatGoal::FindFirstFoodStimulusAvailable(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory) const
-{
-	std::vector<std::shared_ptr<FoodStimulus>> foodStimulusList;
-	FillWithFoodStimulus(memory, foodStimulusList);
-
-	if(!foodStimulusList.empty())
-	{
-		int i = 0;
-		while( i < foodStimulusList.size())
-		{
-			const auto foodStimulus = foodStimulusList[i];
-			const auto actor = foodStimulus->GetActor();
-			if(actor.IsValid())
-			{
-				const auto interactableComponent = actor->FindComponentByClass<UInteractiveComponent>();
-				if(interactableComponent && !interactableComponent->IsBeingUsed())
-				{
-					return foodStimulus;
-				}
-			}
-			++i;
-		}
-	}
-
-	return nullptr;
-}
-
-void EatGoal::FillWithFoodStimulus(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory, std::vector<std::shared_ptr<FoodStimulus>>& foodStimulusList) const
-{
-	memory.PerformActionForEach(
-        [this, &foodStimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
-        {
-            if(stimulus->GetClassName() == typeid(FoodStimulus).name())
-            {
-                const auto foodStimulus = std::static_pointer_cast<FoodStimulus>(stimulus);
-                if(foodStimulus->IsActorAlive())
-                {
-                    foodStimulusList.push_back(foodStimulus);
-                    return true;
-                }
-            }
-            return false;
-        });
-
-	std::sort(foodStimulusList.begin(), foodStimulusList.end(),
-              [this](const std::shared_ptr<FoodStimulus>& a, const std::shared_ptr<FoodStimulus>& b)->bool
-              {
-                  return glm::distance(a->GetPosition(), mAgent->GetPosition()) < glm::distance(b->GetPosition(), mAgent->GetPosition());
-              });
 }

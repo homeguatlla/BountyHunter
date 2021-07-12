@@ -2,17 +2,13 @@
 #include "Predicates.h"
 
 FoodPredicate::FoodPredicate(int id) :
-BasePredicate(id, FOOD_PREDICATE_NAME),
-mPosition{0.0f},
-mAmount{0},
-mActor{nullptr}
+ActorBasedPredicate(id, FOOD_PREDICATE_NAME),
+mAmount{0}
 {
 }
 
 FoodPredicate::FoodPredicate(int id, const glm::vec3& position, unsigned int amount, TWeakObjectPtr<AActor> actor) :
-BasePredicate(id, FOOD_PREDICATE_NAME),
-mPosition{ position },
-mAmount{amount},
-mActor{actor}
+ActorBasedPredicate(id, FOOD_PREDICATE_NAME),
+mAmount{amount}
 {
 }

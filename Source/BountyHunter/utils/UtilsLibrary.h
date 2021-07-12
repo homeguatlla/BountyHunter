@@ -5,6 +5,12 @@
 #include <glm/glm.hpp>
 #include <glm/trigonometric.hpp>
 #include <string>
+#include <algorithm>
+
+#include "BountyHunter/Agents/Components/InteractiveComponent.h"
+#include "goap/memory/ShortTermMemory.h"
+#include "goap/sensory/IStimulus.h"
+#include "Actor.h"
 
 namespace utils
 {
@@ -160,6 +166,62 @@ class UtilsLibrary
 	static float GetRandomRange(float min, float max)
 		{
 			return min + std::rand() % static_cast<int>(max - min + 1);
+		}
+
+	template<class StimulusType>
+	static void FillWithStimulus(
+		const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory,
+		std::vector<std::shared_ptr<StimulusType>>& stimulusList,
+		const glm::vec3& position)
+		{
+			memory.PerformActionForEach(
+				[&stimulusList](const std::shared_ptr<NAI::Goap::IStimulus> stimulus) -> bool
+				{
+					if(stimulus->GetClassName() == typeid(StimulusType).name())
+					{
+						const auto stimulusType = std::static_pointer_cast<StimulusType>(stimulus);
+						if(stimulusType->IsActorAlive())
+						{
+							stimulusList.push_back(stimulusType);
+							return true;
+						}
+					}
+					return false;
+				});
+
+			std::sort(stimulusList.begin(), stimulusList.end(),
+					[&position](const std::shared_ptr<StimulusType>& a, const std::shared_ptr<StimulusType>& b)->bool
+					{
+						return glm::distance(a->GetPosition(), position) < glm::distance(b->GetPosition(), position);
+					});
+		}
+
+	template<class StimulusType>
+	static std::shared_ptr<StimulusType> FindFirstStimulusAvailable(const NAI::Goap::ShortTermMemory<NAI::Goap::IStimulus>& memory, const glm::vec3& position)
+		{
+			std::vector<std::shared_ptr<StimulusType>> stimulusList;
+			utils::UtilsLibrary::FillWithStimulus<StimulusType>(memory, stimulusList, position);
+	
+			if(!stimulusList.empty())
+			{
+				int i = 0;
+				while( i < stimulusList.size())
+				{
+					const auto stimulus = stimulusList[i];
+					const TWeakObjectPtr<AActor> actor = stimulus->GetActor();
+					if(actor.IsValid())
+					{
+						const auto interactableComponent = actor->FindComponentByClass<UInteractiveComponent>();
+						if(interactableComponent && !interactableComponent->IsBeingUsed())
+						{
+							return stimulus;
+						}
+					}
+					++i;
+				}
+			}
+
+			return nullptr;
 		}
 };
 }
