@@ -7,6 +7,6 @@ ActorBasedPredicate(id, ESCAPE_PREDICATE_NAME)
 }
 
 EscapePredicate::EscapePredicate(int id, const glm::vec3& position, TWeakObjectPtr<AActor> actor) :
-ActorBasedPredicate(id, ESCAPE_PREDICATE_NAME)
+ActorBasedPredicate(id, ESCAPE_PREDICATE_NAME, position, actor)
 {
 }
