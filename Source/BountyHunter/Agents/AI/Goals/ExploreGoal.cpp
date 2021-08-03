@@ -73,6 +73,20 @@ void ExploreGoal::RemovePredicates(std::vector<std::shared_ptr<NAI::Goap::IPredi
 	NAI::Goap::Utils::RemovePredicateWith(predicates, WAIT_PREDICATE_NAME);
 }
 
+unsigned ExploreGoal::GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates, std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& accomplishedPredicates) const
+{
+	//if there is a GoTo has priority over explore because GoTo means a specific place to go.
+	for(auto&& predicate : inputPredicates)
+	{
+		if(predicate->GetID() >= GOTO_PREDICATE_ID && predicate->GetID() <= GOTO_FOOD_PREDICATE_ID)
+		{
+			return std::numeric_limits<unsigned int>::max();
+		}
+	}
+	
+	return 100;
+}
+
 void ExploreGoal::OnExploreLocation(const glm::vec3& location)
 {
 	mLocation = location;

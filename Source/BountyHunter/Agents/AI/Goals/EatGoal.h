@@ -15,7 +15,7 @@ public:
 	EatGoal(IIEatComponent* eatComponent);
 	virtual ~EatGoal() = default;
 	unsigned GetCost() const override { return 10; } //TODO maybe 
-	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates) const override { return 10; }	
+	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates, std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& accomplishedPredicates) const override { return 10; }	
 	
 protected:
 	void DoCreate(const std::shared_ptr<NAI::Goap::IAgent>& agent) override;

@@ -21,7 +21,7 @@ public:
 	
 	virtual ~GoToHomeGoal() = default;
 	unsigned GetCost() const override { return 0; } //TODO maybe 
-	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates) const override { return 0; }	
+	unsigned GetCost(std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& inputPredicates, std::vector<std::shared_ptr<NAI::Goap::IPredicate>>& accomplishedPredicates) const override { return 0; }	
 	void OnNavigationPath(const std::string& placeName, const std::shared_ptr<NAI::Navigation::INavigationPath>& path) override;
 	glm::vec3 GetDestination(const std::shared_ptr<NAI::Goap::IPredicate> predicate) const override;
 	
