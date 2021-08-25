@@ -63,7 +63,7 @@ std::shared_ptr<NAI::Goap::IPredicate> GoToHomeGoal::DoTransformStimulusIntoPred
 	//y entonces activar ir a home. En realidad esto lo haremos através del
 	//escapeGoal. Este decidirá si hay que huir a home o no. Para probar, lo ponemos
 	//aquí.
-	
+	/*
 	if(orderedSoundStimulusList.empty())
 	{
 		return nullptr;
@@ -77,7 +77,7 @@ std::shared_ptr<NAI::Goap::IPredicate> GoToHomeGoal::DoTransformStimulusIntoPred
 			return std::make_shared<NAI::Goap::BasePredicate>(GO_HOME_PREDICATE_ID, GO_HOME_PREDICATE_NAME);
 		}
 	}
-	
+	*/
 	return nullptr;
 }
 

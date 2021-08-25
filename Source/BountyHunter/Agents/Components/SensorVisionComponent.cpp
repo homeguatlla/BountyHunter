@@ -59,13 +59,14 @@ void USensorVisionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			bool stimulusCreated = false;
 			
 			stimulusCreated = CheckIfIs<UInteractiveComponent>(*hit.Actor);
-			stimulusCreated |= CheckIfIs<UDangerousComponent>(*hit.Actor);
+			const auto isDangerous = CheckIfIs<UDangerousComponent>(*hit.Actor); 
+			stimulusCreated |= isDangerous;
 			
 			if(IsDebug && stimulusCreated)
 			{
 				auto name = hit.Actor->GetName();
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Hit Result: %s"), *name));
-				DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, FColor::Red, false);
+				DrawDebugSphere(GetWorld(), hit.ImpactPoint, 5.0f, 10.0f, isDangerous ? FColor::Red : FColor::Green, false);
 			}
 		}			
 	}

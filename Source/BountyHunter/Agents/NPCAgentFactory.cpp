@@ -5,6 +5,7 @@
 #include "AI/NPCAIController.h"
 #include "AI/Goals/EatGoal.h"
 
+#include <goap/BasePredicate.h>
 #include <goap/goals/GoToGoal.h>
 #include <goap/planners/TreeGoapPlanner.h>
 #include <goap/predicates/GoToPredicate.h>
@@ -12,20 +13,21 @@
 #include <goap/sensory/SensorySystem.h>
 
 #include <BountyHunter/Stimulus/FoodStimulus.h>
+#include <BountyHunter/Stimulus/SoundStimulus.h>
+#include <BountyHunter/Stimulus/DangerStimulus.h>
+
 #include <BountyHunter/Thresholds/FoodThreshold.h>
+#include <BountyHunter/Thresholds/DangerThreshold.h>
+#include <BountyHunter/Thresholds/SoundThreshold.h>
 
+#include <BountyHunter/Agents/AI/Predicates/Predicates.h>
+#include <BountyHunter/Agents/FSM/Chicken/ChickenContext.h>
+#include <BountyHunter/Agents/FSM/Chicken/states/ChickenStates.h>
 
-#include "AI/Predicates/Predicates.h"
-#include "BountyHunter/Character/fsm/CharacterContext.h"
-#include "BountyHunter/Character/fsm/states/CharacterStates.h"
-#include "BountyHunter/FSM/StatesMachineFactory.h"
-#include "BountyHunter/Stimulus/SoundStimulus.h"
-#include "BountyHunter/Thresholds/SoundThreshold.h"
-#include "Components/EatComponent.h"
-#include "FSM/Chicken/ChickenContext.h"
-#include "FSM/Chicken/states/ChickenStates.h"
-#include "GameFramework/Character.h"
-#include "goap/BasePredicate.h"
+#include <BountyHunter/Character/fsm/CharacterContext.h>
+#include <BountyHunter/Character/fsm/states/CharacterStates.h>
+
+#include <BountyHunter/FSM/StatesMachineFactory.h>
 
 namespace TLN
 {
@@ -94,6 +96,7 @@ namespace TLN
                         .WithPerceptionSystem(sensorySystem)
                         .WithSensoryThreshold(typeid(FoodStimulus).name(), std::make_shared<FoodThreshold>())
 						.WithSensoryThreshold(typeid(SoundStimulus).name(), std::make_shared<SoundThreshold>())
+						.WithSensoryThreshold(typeid(DangerStimulus).name(), std::make_shared<DangerThreshold>())
                         .WithStatesMachine(
                             fsmFactory.CreateChicken(
                                 FSMType::CHICKEN_MOVEMENT,

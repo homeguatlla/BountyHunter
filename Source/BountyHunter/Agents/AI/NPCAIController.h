@@ -44,6 +44,7 @@ class BOUNTYHUNTER_API ANPCAIController : public AAIController, public IAgentAIC
 		virtual FString GetAgentCurrentState_Implementation() const;
 
 		void AddNewPredicate(std::shared_ptr<NAI::Goap::IPredicate> predicate);
+
 		void SubscribeSensor(std::shared_ptr<NAI::Goap::BaseSensor> sensor) const;
 		void AddNewGoal(std::shared_ptr<NAI::Goap::IGoal> goal);
 		std::shared_ptr<NAI::Navigation::INavigationPlanner> GetNavigationPlanner() const { return mNavigationPlanner;}
