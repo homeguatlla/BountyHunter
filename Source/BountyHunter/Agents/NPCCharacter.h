@@ -19,6 +19,8 @@ public:
 	float GetMovementSpeed() const override;
 	bool IsEating() const override;
 	bool IsExploring() const override;
+	bool IsEscaping() const override;
+
 private:
 	template<class TComponent, class IComponent, class UIComponent>
 	TScriptInterface<IComponent> GetComponent() const;

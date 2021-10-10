@@ -16,7 +16,10 @@ void UEscapeComponent::BeginPlay()
 	Super::BeginPlay();
 
 	auto controller = GetNPCAIController();
-	controller->AddNewGoal(std::make_shared<EscapeGoal>(this));
+	controller->AddNewGoal(std::make_shared<EscapeGoal>(
+		this,
+		controller->GetNavigationPlanner(),
+		100.0f));
 }
 
 void UEscapeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

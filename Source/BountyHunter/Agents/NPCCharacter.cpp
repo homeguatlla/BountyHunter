@@ -1,6 +1,7 @@
 ﻿#include "NPCCharacter.h"
 
 #include "Components/EatComponent.h"
+#include "Components/EscapeComponent.h"
 #include "Components/ExploreComponent.h"
 
 float ANPCCharacter::GetMovementSpeed() const
@@ -26,6 +27,17 @@ bool ANPCCharacter::IsExploring() const
 	if(exploreComponent)
 	{
 		return exploreComponent->IsExploring();
+	}
+
+	return false;
+}
+
+bool ANPCCharacter::IsEscaping() const
+{
+	const auto escapeComponent = GetComponent<UEscapeComponent, IIEscapeComponent, UIEscapeComponent>();
+	if(escapeComponent)
+	{
+		return escapeComponent->IsEscaping();
 	}
 
 	return false;

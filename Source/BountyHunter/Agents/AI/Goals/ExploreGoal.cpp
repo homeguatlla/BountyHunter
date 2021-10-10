@@ -138,7 +138,7 @@ std::shared_ptr<NAI::Goap::FindPathToAction> ExploreGoal::CreateFindPathToAction
 	std::vector<std::string> preConditions = {EXPLORE_TO_PREDICATE_NAME};
 	std::vector<std::shared_ptr<NAI::Goap::IPredicate>> postConditions = {std::make_shared<NAI::Goap::BasePredicate>(EXPLORE_GOT_PATH_PREDICATE_ID, EXPLORE_GOT_PATH_PREDICATE_NAME)};
 
-	const auto goal = std::static_pointer_cast<ExploreGoal>(shared_from_this());
+	const auto goal  = std::static_pointer_cast<ExploreGoal>(shared_from_this());
 	auto action = std::make_shared<NAI::Goap::FindPathToAction>(goal, preConditions, postConditions, agent, navigationPlanner);
 
 	return action;
