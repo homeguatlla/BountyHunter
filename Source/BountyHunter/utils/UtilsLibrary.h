@@ -1,16 +1,10 @@
 #pragma once
-#include "CoreMinimal.h"
-#include "Kismet/GameplayStatics.h"
-#include "Engine/World.h"
-#include <glm/glm.hpp>
-#include <glm/trigonometric.hpp>
-#include <string>
-#include <algorithm>
 
 #include "BountyHunter/Agents/Components/InteractiveComponent.h"
 #include "goap/memory/ShortTermMemory.h"
 #include "goap/sensory/IStimulus.h"
-#include "Actor.h"
+#include "Blueprint/UserWidget.h"
+#include <vector>
 
 namespace utils
 {
@@ -39,7 +33,7 @@ class UtilsLibrary
 				//refer to the link below
 				//https://answers.unrealengine.com/questions/810228/strange-behaviour-of-uuserwidgetcreatewidgetinstan.html?sort=oldest
 
-			FString hudName = hudClass->GetName() + "_" + FString::FromInt(hudIndex) + "_" + name;
+			const FString hudName = hudClass->GetName() + "_" + FString::FromInt(hudIndex) + "_" + name;
 			UUserWidget* widget = CreateWidget<UUserWidget>(playerController, hudClass, FName(*hudName));
 
 			if (autoAddToViewport)
@@ -121,7 +115,7 @@ class UtilsLibrary
 			FVector forwardVector = destPoint - sourcePoint;
 			forwardVector.Normalize();
 
-			float dot = FVector::DotProduct(FVector::ForwardVector, forwardVector);
+			const float dot = FVector::DotProduct(FVector::ForwardVector, forwardVector);
 
 			//two opposite vectors, angle = 180 we proceed with UpVector and angle 180
 			if (FMath::IsNearlyZero(FGenericPlatformMath::Abs(dot - (-1.0f))))
@@ -135,7 +129,7 @@ class UtilsLibrary
 			}
 			else
 			{
-				float rotAngle = (float)FGenericPlatformMath::Acos(dot);
+				const float rotAngle = (float)FGenericPlatformMath::Acos(dot);
 				FVector rotAxis = FVector::CrossProduct(FVector::ForwardVector, forwardVector);
 				rotAxis.Normalize();
 				return CreateQuatFromAxisAngle(rotAxis, rotAngle);
@@ -144,13 +138,13 @@ class UtilsLibrary
 
 	static FQuat CreateQuatFromAxisAngle(const FVector& axis, float angle)
 		{
-			float halfAngle = angle * .5f;
-			float s = (float)FGenericPlatformMath::Sin(halfAngle);
+			const float halfAngle = angle * .5f;
+			const float s = static_cast<float>(FGenericPlatformMath::Sin(halfAngle));
 			FQuat q;
 			q.X = axis.X * s;
 			q.Y = axis.Y * s;
 			q.Z = axis.Z * s;
-			q.W = (float)FGenericPlatformMath::Cos(halfAngle);
+			q.W = static_cast<float>(FGenericPlatformMath::Cos(halfAngle));
 			return q;
 		}
 
