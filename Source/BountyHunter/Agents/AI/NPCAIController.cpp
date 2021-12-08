@@ -11,7 +11,10 @@
 #include <BountyHunter/Agents/NPCCharacter.h>
 #include <BountyHunter/Agents/AI/NPCAgent.h>
 #include <BountyHunter/utils/UtilsLibrary.h>
+#include <BountyHunter/Stimulus/DangerStimulus.h>
 
+
+#include "BountyHunter/Thresholds/DangerThreshold.h"
 #include "GameFramework/Character.h"
 #include "Runtime/AIModule/Classes/Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/World.h"
@@ -31,6 +34,18 @@ void ANPCAIController::BeginPlay()
 	CreateAgent(npcCharacter->GetNPCType());
 }
 
+void ANPCAIController::UpdateAgentThresholds()
+{
+	auto thresholds = mAgent->GetSensoryThresholds();
+
+	auto dangerThresholdIt = thresholds.find(typeid(DangerStimulus).name());
+	if(dangerThresholdIt != thresholds.end())
+	{
+		auto dangerThreshold = std::static_pointer_cast<DangerThreshold>(dangerThresholdIt->second);
+		dangerThreshold->SetAgentPosition(mAgent->GetPosition());
+	}
+}
+
 void ANPCAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -38,6 +53,7 @@ void ANPCAIController::Tick(float DeltaTime)
 	if(mAgent != nullptr)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("[ANPCAIController::Tick]"));
+		UpdateAgentThresholds();
 		mAgent->Update(DeltaTime);
 		/*auto predicates = mAgent->GetPredicates();
 		for(auto&& predicate : predicates)
